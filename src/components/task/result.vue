@@ -18,7 +18,8 @@
         <tbody>
         <tr>
           <td class="text-center">
-            <img src="http://lorempixel.com/250/200/technics"/>
+            <img src="./img/no_reading.jpg"/>
+            <!--<img src="http://lorempixel.com/250/200/technics"/>-->
           </td>
           <td class="text-right">
             <q-btn @click="" small>
@@ -40,7 +41,7 @@
       </table>
     </div>
 
-    <q-btn color="primary" class="full-width fixed-bottom" @click="complete" big>
+    <q-btn color="primary" class="full-width fixed-bottom" @click="complete" big v-show="footer_show">
       Complete
     </q-btn>
   </div>
@@ -62,7 +63,8 @@
     data () {
       return {
         manual_reading: 1234.56, // scan_reading
-        reading_editing: false
+        reading_editing: false,
+        footer_show: true
       }
     },
     methods: {
@@ -70,6 +72,11 @@
         this.reading_editing = !this.reading_editing
         if (this.reading_editing) {
           this.$refs.reading_input.select()
+          this.$refs.reading_input.focus()
+          this.footer_show = false
+        }
+        else {
+          this.footer_show = true
         }
       },
       complete: function () {

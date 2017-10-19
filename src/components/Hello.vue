@@ -43,6 +43,10 @@
           <q-item-side icon="rss feed" />
           <q-item-main label="Twitter" sublabel="@quasarframework" />
         </q-item>
+        <q-side-link item to="/task/result">
+          <q-item-side icon="rss feed" />
+          <q-item-main label="Task - Result" sublabel="@quasarframework" />
+        </q-side-link>
       </q-list>
     </div>
 
@@ -73,7 +77,8 @@ import {
   QListHeader,
   QItem,
   QItemSide,
-  QItemMain
+  QItemMain,
+  QSideLink
 } from 'quasar'
 
 const
@@ -106,7 +111,8 @@ export default {
     QListHeader,
     QItem,
     QItemSide,
-    QItemMain
+    QItemMain,
+    QSideLink
   },
   data () {
     return {

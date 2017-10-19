@@ -71,6 +71,9 @@
       ...
     </q-toolbar>
     -->
+    <!--<q-btn slot="footer" color="primary" class="full-width fixed-bottom" @click="complete" big>-->
+      <!--Footer-->
+    <!--</q-btn>-->
   </q-layout>
 </template>
 
