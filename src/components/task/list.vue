@@ -8,9 +8,9 @@
       icon=""
       :after="[{
         icon:'search',
-        handler: 'search',
+        handler: 'searchIt',
       }]"
-    ></q-search>
+    />
     <q-btn color="primary" class="full-width fixed-bottom" @click="next" big>
       Next
     </q-btn>
@@ -94,11 +94,18 @@
     },
     data () {
       return {
-        search_text: null
+        search_text: null,
+        search_action: [{
+          icon: 'search',
+          handler: 'search'
+        }]
       }
     },
     methods: {
-      search: function () {
+      next: function () {
+        alert('next')
+      },
+      searchIt: function () {
         alert('search')
       }
     }
