@@ -1,13 +1,14 @@
 <template>
   <!-- if you want automatic padding use "layout-padding" class -->
-  <div class="layout-padding">
+  <div class="layout-padding" ref="page">
     <h6 class="text-center">A-101,HM,Electricity - DEC,2017</h6>
+    <h6 class="text-center">id: {{id}}</h6>
 
     <div id="main-div" class="bg-lime-3 round-borders">
       <table class="q-table">
         <thead>
         <tr>
-          <th class="text-left" width="90%">Normal</th>
+          <th class="text-left capitalize" width="90%">{{period}}</th>
           <th class="text-right">
             <q-btn @click="" small>
               <q-icon name="fullscreen" />
@@ -29,7 +30,9 @@
         </tr>
         <tr>
           <td class="text-center">
-            <q-input ref="reading_input" v-model.trim="manual_reading" stack-label="Reading" type="number" :readonly="!reading_editing" />
+            <q-input ref="reading_input" v-model.trim="manual_reading" stack-label="Reading"
+                     type="number" :readonly="!reading_editing" @click="inputClick"
+            />
           </td>
           <td class="text-right">
             <q-btn @click="toggleReadingEdit" small>
@@ -51,18 +54,20 @@
   import {
     QBtn,
     QIcon,
-    QInput
+    QInput,
+    scroll
   } from 'quasar'
+  const { getScrollTarget, setScrollPosition } = scroll
   export default {
     components: {
       QBtn,
       QIcon,
       QInput
     },
-    props: ['scan_reading'],
+    props: ['scan_reading', 'id', 'period'],
     data () {
       return {
-        manual_reading: 1234.56, // scan_reading
+        manual_reading: 84321.56, // scan_reading
         reading_editing: false,
         footer_show: true
       }
@@ -72,12 +77,17 @@
         this.reading_editing = !this.reading_editing
         if (this.reading_editing) {
           this.$refs.reading_input.select()
-          this.$refs.reading_input.focus()
           this.footer_show = false
         }
         else {
           this.footer_show = true
         }
+      },
+      inputClick () {
+        console.log('click8')
+        // codes here is for bug: keyboard will cover the input element
+        let page = getScrollTarget(this.$refs.reading_input.$el)
+        setScrollPosition(page, 1000, 500) // 1000 is a number big enough
       },
       complete: function () {
         alert('complete')

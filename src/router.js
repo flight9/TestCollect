@@ -34,8 +34,9 @@ export default new VueRouter({
         component: load('task/list')
       },
       {
-        path: 'result',
-        component: load('task/result')
+        path: ':id/:period/result',
+        component: load('task/result'),
+        props: true
       }
       ]
     },

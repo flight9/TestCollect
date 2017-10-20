@@ -43,7 +43,7 @@
           <q-item-side icon="rss feed" />
           <q-item-main label="Twitter" sublabel="@quasarframework" />
         </q-item>
-        <q-side-link item to="/task/result">
+        <q-side-link item to="/task/1717/Peak/result">
           <q-item-side icon="rss feed" />
           <q-item-main label="Task - Result" sublabel="@quasarframework" />
         </q-side-link>
