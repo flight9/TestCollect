@@ -31,12 +31,12 @@
         <tr>
           <td class="text-center">
             <q-input ref="reading_input" v-model.trim="manual_reading" stack-label="Reading"
-                     type="number" :readonly="!reading_editing" @click="inputClick"
+                     type="number" :readonly="!reading_editing" @click="scrollBottom"
             />
           </td>
           <td class="text-right">
             <q-btn @click="toggleReadingEdit" small>
-              <q-icon name="edit" />
+              <q-icon :name="button_icon" />
             </q-btn>
           </td>
         </tr>
@@ -55,7 +55,8 @@
     QBtn,
     QIcon,
     QInput,
-    scroll
+    scroll,
+    Alert
   } from 'quasar'
   const { getScrollTarget, setScrollPosition } = scroll
   export default {
@@ -64,12 +65,14 @@
       QIcon,
       QInput
     },
-    props: ['scan_reading', 'id', 'period'],
+    props: ['reading', 'id', 'period'],
     data () {
       return {
-        manual_reading: 84321.56, // scan_reading
+        manual_reading: 94321.56, // this.reading
+        final_reading: 94321.56, // this.reading
         reading_editing: false,
-        footer_show: true
+        footer_show: true,
+        button_icon: 'edit'
       }
     },
     methods: {
@@ -78,19 +81,52 @@
         if (this.reading_editing) {
           this.$refs.reading_input.select()
           this.footer_show = false
+          this.button_icon = 'check_circle'
         }
         else {
           this.footer_show = true
+          this.button_icon = 'edit'
+          if (this.check(this.manual_reading)) {
+            this.final_reading = this.manual_reading
+          }
+          else {
+            Alert.create({
+              html: 'Error: the input is out of range!',
+              color: 'error',
+              actions: [
+                {
+                  label: 'Snooze',
+                  handler () {
+                    console.log('acting')
+                  }
+                }
+              ]
+            })
+            this.manual_reading = this.final_reading
+          }
         }
       },
-      inputClick () {
-        console.log('click8')
+      check (data) {
+        if (data > 10) {
+          return true
+        }
+        else {
+          return false
+        }
+      },
+      scrollBottom () {
         // codes here is for bug: keyboard will cover the input element
         let page = getScrollTarget(this.$refs.reading_input.$el)
         setScrollPosition(page, 1000, 500) // 1000 is a number big enough
       },
       complete: function () {
-        alert('complete')
+        // alert('complete')
+        // var vm = this
+        this.$http.get('https://jsonplaceholder.typicode.com/users')
+          .then(function (response) {
+            let users = response.data
+            console.log(users)
+          })
       }
     }
   }

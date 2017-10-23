@@ -8,7 +8,9 @@
       icon=""
       :after="[{
         icon:'search',
-        handler: 'searchIt',
+        handler () {
+          console.log('acting')
+        }
       }]"
     />
     <q-btn color="primary" class="full-width fixed-bottom" @click="next" big>
