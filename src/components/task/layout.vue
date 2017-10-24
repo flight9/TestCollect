@@ -85,7 +85,7 @@
     QBtn,
     QIcon
   } from 'quasar'
-
+  import { mapState } from 'vuex'
   export default {
     components: {
       QLayout,
@@ -99,13 +99,19 @@
         store_name: 'store A'
       }
     },
+    computed: {
+      ...mapState([
+        'user'
+      ])
+    },
     methods: {
       goback: function () {
         this.$router.go(-1)
         // window.history.go(-1)
       },
       upload: function () {
-        alert('upload')
+        let uid = this.user.id
+        alert(uid)
       },
       scancode: function () {
         alert('scancode')

@@ -14,12 +14,11 @@ import Vue from 'vue'
 import Quasar from 'quasar'
 import router from './router'
 import axios from 'axios'
-import Vuex from 'vuex'
+import store from './store'
 
 Vue.config.productionTip = false
 Vue.use(Quasar) // Install Quasar Framework
 Vue.prototype.$http = axios
-Vue.use(Vuex)
 
 if (__THEME === 'mat') {
   require('quasar-extras/roboto-font')
@@ -34,6 +33,7 @@ Quasar.start(() => {
   new Vue({
     el: '#q-app',
     router,
+    store,
     render: h => h(require('./App').default)
   })
 })
