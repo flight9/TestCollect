@@ -10,7 +10,7 @@
         <tr>
           <th class="text-left capitalize" width="90%">{{period}}</th>
           <th class="text-right">
-            <q-btn @click="" small>
+            <q-btn @click="scan" small>
               <q-icon name="fullscreen" />
             </q-btn>
           </th>
@@ -67,6 +67,7 @@
     Alert,
     QSelect
   } from 'quasar'
+  import anyline from 'src/api/tri_anyline'
   const { getScrollTarget, setScrollPosition } = scroll
   export default {
     components: {
@@ -140,13 +141,16 @@
         let page = getScrollTarget(this.$refs.reading_input.$el)
         setScrollPosition(page, 1000, 500) // 1000 is a number big enough
       },
-      complete: function () {
+      complete () {
         // var vm = this
         this.$http.get('https://jsonplaceholder.typicode.com/users')
           .then(function (response) {
             let users = response.data
             console.log(users)
           })
+      },
+      scan () {
+        anyline.myfunc()
       }
     }
   }
