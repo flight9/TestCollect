@@ -28,15 +28,24 @@
           </td>
         </tr>
         <tr>
-          <td class="text-center">
-            <q-input ref="reading_input" v-model.trim="manual_reading" stack-label="Reading"
-                     type="number" :readonly="!reading_editing" @click="scrollBottom"
+          <td>
+            <q-input ref="reading_input" v-model.trim="manual_reading" stack-label="Reading" error
+                     type="number" :readonly="!reading_editing" align="right" @click="scrollBottom"
             />
           </td>
           <td class="text-right">
             <q-btn @click="toggleReadingEdit" small>
               <q-icon :name="button_icon" />
             </q-btn>
+          </td>
+        </tr>
+        <tr>
+          <td colspan="2">
+            <q-select
+              v-model="comment"
+              stack-label="Comment?"
+              :options="commentOptions"
+            />
           </td>
         </tr>
         </tbody>
@@ -55,14 +64,16 @@
     QIcon,
     QInput,
     scroll,
-    Alert
+    Alert,
+    QSelect
   } from 'quasar'
   const { getScrollTarget, setScrollPosition } = scroll
   export default {
     components: {
       QBtn,
       QIcon,
-      QInput
+      QInput,
+      QSelect
     },
     props: ['reading', 'id', 'period'],
     data () {
@@ -71,7 +82,26 @@
         final_reading: 94321.56, // this.reading
         reading_editing: false,
         footer_show: true,
-        button_icon: 'edit'
+        button_icon: 'edit',
+        comment: '',
+        commentOptions: [
+          {
+            label: '(No comment)',
+            value: ''
+          },
+          {
+            label: 'The PM is broken.',
+            value: 'broken'
+          },
+          {
+            label: 'We changed a new PM.',
+            value: 'new'
+          },
+          {
+            label: 'I don\'t know why.',
+            value: 'unknown'
+          }
+        ]
       }
     },
     methods: {
