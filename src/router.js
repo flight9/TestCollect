@@ -25,7 +25,8 @@ export default new VueRouter({
   scrollBehavior: () => ({ y: 0 }),
 
   routes: [
-    { path: '/', component: load('Hello') },
+    // { path: '/', component: load('Hello') },
+    { path: '/', component: load('programs') },
     {
       path: '/task',
       component: load('task/layout'),

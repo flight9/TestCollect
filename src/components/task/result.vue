@@ -20,7 +20,6 @@
         <tr>
           <td class="text-center">
             <img src="./img/no_reading.jpg"/>
-            <!--<img src="http://lorempixel.com/250/200/technics"/>-->
           </td>
           <td class="text-right">
             <q-btn @click="" small>
@@ -92,15 +91,7 @@
           else {
             Alert.create({
               html: 'Error: the input is out of range!',
-              color: 'error',
-              actions: [
-                {
-                  label: 'Snooze',
-                  handler () {
-                    console.log('acting')
-                  }
-                }
-              ]
+              color: 'error'
             })
             this.manual_reading = this.final_reading
           }
@@ -120,7 +111,6 @@
         setScrollPosition(page, 1000, 500) // 1000 is a number big enough
       },
       complete: function () {
-        // alert('complete')
         // var vm = this
         this.$http.get('https://jsonplaceholder.typicode.com/users')
           .then(function (response) {
