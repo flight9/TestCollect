@@ -19,7 +19,7 @@
         <tbody>
         <tr>
           <td class="text-center">
-            <img src="./img/no_reading.jpg"/>
+            <img :src="photo_src" width="250"/>
           </td>
           <td class="text-right">
             <q-btn @click="" small>
@@ -79,8 +79,8 @@
     props: ['reading', 'id', 'period'],
     data () {
       return {
-        manual_reading: 94321.56, // this.reading
-        final_reading: 94321.56, // this.reading
+        manual_reading: 94321.13, // this.reading
+        final_reading: 94321.13, // this.reading
         reading_editing: false,
         footer_show: true,
         button_icon: 'edit',
@@ -102,9 +102,11 @@
             label: 'I don\'t know why.',
             value: 'unknown'
           }
-        ]
+        ],
+        photo_src: require('./img/no_reading.jpg')
       }
     },
+    computed: {},
     methods: {
       toggleReadingEdit: function () {
         this.reading_editing = !this.reading_editing
@@ -151,7 +153,27 @@
       },
       scan () {
         // anyline.myfunc()
-        anyline.energy.scan('AUTO_ANALOG_DIGITAL_METER')
+        anyline.energy.scan('AUTO_ANALOG_DIGITAL_METER', this.onSuccess)
+      },
+      onSuccess (result) {
+        // Unlock
+        localStorage.setItem('hasStartedAnyline', false)
+        console.log('Energy result: ' + JSON.stringify(result))
+
+        // Parse barcode
+        if (result.detectedBarcodes) {
+          var detailsBarcodes = ''
+          for (var i = 0; i < result.detectedBarcodes.length; i++) {
+            detailsBarcodes += result.detectedBarcodes[i].value
+            // Omit type and mutiple
+          }
+        }
+
+        // Reading
+        this.final_reading = this.manual_reading = result.reading
+        this.photo_src = result.imagePath
+        alert('Barcode:' + detailsBarcodes.toString())
+        alert(result.imagePath)
       }
     }
   }

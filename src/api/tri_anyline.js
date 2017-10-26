@@ -103,7 +103,7 @@ anyline.energy = {
     {'nativeBarcodeEnabled': true}
   ],
 
-  scan: function (scanMode) {
+  scan: function (scanMode, onSuccess = null) {
     // Lock
     if (localStorage.getItem('hasStartedAnyline') === 'true') {
       return
@@ -127,7 +127,11 @@ anyline.energy = {
       }
     }
 
-    cordova.exec(this.onResult, this.onError, 'AnylineSDK', scanMode, this.energyConfig)
+    let callback = onSuccess
+    if (!onSuccess) {
+      callback = this.onResult
+    }
+    cordova.exec(callback, this.onError, 'AnylineSDK', scanMode, this.energyConfig)
   }
 }
 
