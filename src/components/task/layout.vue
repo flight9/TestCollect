@@ -86,6 +86,7 @@
     QIcon
   } from 'quasar'
   import { mapState } from 'vuex'
+  import connection from 'src/api/tri_connection'
   export default {
     components: {
       QLayout,
@@ -110,8 +111,8 @@
         // window.history.go(-1)
       },
       upload: function () {
-        let uid = this.user.id
-        alert(uid)
+        connection.checkConnection()
+        alert(connection.isConnecting() ? 'true' : 'false')
       },
       scancode: function () {
         alert('scancode')

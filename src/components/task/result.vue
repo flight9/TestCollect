@@ -79,8 +79,8 @@
     props: ['reading', 'id', 'period'],
     data () {
       return {
-        manual_reading: 94321.13, // this.reading
-        final_reading: 94321.13, // this.reading
+        final_reading: 94321.16, // this.reading
+        manual_reading: this.final_reading, // this.reading
         reading_editing: false,
         footer_show: true,
         button_icon: 'edit',
