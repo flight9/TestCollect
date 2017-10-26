@@ -150,7 +150,8 @@
           })
       },
       scan () {
-        anyline.myfunc()
+        // anyline.myfunc()
+        anyline.energy.scan('AUTO_ANALOG_DIGITAL_METER')
       }
     }
   }
