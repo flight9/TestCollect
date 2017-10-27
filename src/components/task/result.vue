@@ -2,13 +2,14 @@
   <!-- if you want automatic padding use "layout-padding" class -->
   <div class="layout-padding" ref="page">
     <h6 class="text-center">A-101,HM,Electricity - DEC,2017</h6>
-    <h6 class="text-center">id: {{id}}</h6>
+    <h6 class="text-center">Tid: {{tid}}</h6>
+    <h6 class="text-center">PM: {{barcode}}</h6>
 
     <div id="main-div" class="bg-lime-3 round-borders">
       <table class="q-table">
         <thead>
         <tr>
-          <th class="text-left capitalize" width="90%">{{period}}</th>
+          <th class="text-left capitalize" width="90%">{{npv}}</th>
           <th class="text-right">
             <q-btn @click="scan" small>
               <q-icon name="fullscreen" />
@@ -29,7 +30,7 @@
         </tr>
         <tr>
           <td>
-            <q-input ref="reading_input" v-model.trim="manual_reading" stack-label="Reading" error
+            <q-input ref="reading_input" v-model.trim="input_reading" stack-label="Reading" error
                      type="number" :readonly="!reading_editing" align="right" @click="scrollBottom"
             />
           </td>
@@ -77,17 +78,15 @@
       QSelect
     },
     props: {
-      reading: {
-        type: Number,
-        default: 88888.16
-      },
-      id: Number,
-      period: String
     },
     data () {
       return {
-        final_reading: 94321.16, // this.reading 94321.16
-        manual_reading: this.reading, // this.reading
+        final_reading: 0,
+        input_reading: 0,
+        barcode: '',
+        photo_src: '',
+        tid: 0,
+        npv: '',
         reading_editing: false,
         footer_show: true,
         button_icon: 'edit',
@@ -109,11 +108,24 @@
             label: 'I don\'t know why.',
             value: 'unknown'
           }
-        ],
-        photo_src: require('./img/no_reading.jpg')
+        ]
       }
     },
     computed: {},
+    created: function () {
+      let sc = this.$parent.$parent.scan_result
+      if (sc.tid === 0) {
+        this.input_reading = this.final_reading = sc.reading
+        this.barcode = sc.barcode
+        this.photo_src = sc.photo_src
+        this.npv = sc.npv
+        // Todo: search for barcode to get tid
+      }
+      else {
+        this.tid = sc.tid
+        // Todo: read existing result
+      }
+    },
     methods: {
       toggleReadingEdit: function () {
         this.reading_editing = !this.reading_editing
@@ -125,15 +137,15 @@
         else {
           this.footer_show = true
           this.button_icon = 'edit'
-          if (this.check(this.manual_reading)) {
-            this.final_reading = this.manual_reading
+          if (this.check(this.input_reading)) {
+            this.final_reading = this.input_reading
           }
           else {
             Alert.create({
               html: 'Error: the input is out of range!',
               color: 'error'
             })
-            this.manual_reading = this.final_reading
+            this.input_reading = this.final_reading
           }
         }
       },
@@ -159,7 +171,6 @@
           })
       },
       scan () {
-        // anyline.myfunc()
         anyline.energy.scan('AUTO_ANALOG_DIGITAL_METER', this.onSuccess)
       },
       onSuccess (result) {
@@ -177,10 +188,10 @@
         }
 
         // Reading
-        this.final_reading = this.manual_reading = result.reading
+        // Todo: check the new barcode is the same barcode
+        this.final_reading = this.input_reading = result.reading
         this.photo_src = result.imagePath
-        alert('Barcode:' + detailsBarcodes.toString())
-        alert(result.imagePath)
+        this.barcode = detailsBarcodes
       }
     }
   }

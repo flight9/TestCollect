@@ -17,7 +17,7 @@
       </q-btn>
     </q-toolbar>
 
-    <q-card inline @click="$router.push('/task/123/peak/result')">
+    <q-card inline @click="$router.push('/task/list')">
       <q-card-media>
         <img src="./img/program-1.jpg">
         <q-card-title slot="overlay">

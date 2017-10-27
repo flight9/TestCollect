@@ -97,7 +97,14 @@
     },
     data () {
       return {
-        store_name: 'store A'
+        store_name: 'store A',
+        scan_result: {
+          reading: 8888.88,
+          barcode: 'PM-333333',
+          photo_src: require('./img/no_reading.jpg'),
+          tid: 0,
+          npv: 'normal'
+        }
       }
     },
     computed: {

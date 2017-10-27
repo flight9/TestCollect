@@ -13,6 +13,9 @@
         }
       }]"
     />
+    <q-btn @click="scan">
+      <q-icon name="fullscreen" />
+    </q-btn>
     <q-btn color="primary" class="full-width fixed-bottom" @click="next" big>
       Next
     </q-btn>
@@ -85,6 +88,7 @@
     QIcon,
     QSearch
   } from 'quasar'
+  import anyline from 'src/api/tri_anyline'
   export default {
     components: {
       QLayout,
@@ -109,6 +113,44 @@
       },
       searchIt: function () {
         alert('search')
+      },
+      scan () {
+        anyline.energy.scan('AUTO_ANALOG_DIGITAL_METER', this.onSuccess)
+      },
+      onSuccess (result) {
+        // Unlock
+        localStorage.setItem('hasStartedAnyline', false)
+        console.log('Energy result: ' + JSON.stringify(result))
+
+        // Parse barcode
+        if (result.detectedBarcodes) {
+          var detailsBarcodes = ''
+          for (var i = 0; i < result.detectedBarcodes.length; i++) {
+            detailsBarcodes += result.detectedBarcodes[i].value
+            // Omit type and mutiple
+          }
+        }
+
+        // Reading
+        let sc = this.$parent.$parent.scan_result
+        sc.reading = result.reading
+        sc.barcode = detailsBarcodes
+        sc.photo_src = result.imagePath
+        sc.tid = 0
+
+        if (!sc.barcode) {
+          alert('Error: no barcode!')
+          return
+        }
+
+        if (!sc.reading) {
+          alert('Error: no reading!')
+          return
+        }
+
+        // prompt to select npv
+
+        this.$router.push('/task/result')
       }
     }
   }
