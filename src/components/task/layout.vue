@@ -115,7 +115,7 @@
         alert(connection.isConnecting() ? 'true' : 'false')
       },
       scancode: function () {
-        alert('scancode')
+        alert(true)
       }
     }
   }
