@@ -135,4 +135,22 @@ anyline.energy = {
   }
 }
 
+anyline.unlockScan = function () {
+  localStorage.setItem('hasStartedAnyline', false)
+  // console.log('Energy result: ' + JSON.stringify(result))
+}
+
+anyline.parseBarcode = function (result) {
+  anyline.unlockScan()
+
+  var detailsBarcodes = ''
+  if (result.detectedBarcodes) {
+    for (var i = 0; i < result.detectedBarcodes.length; i++) {
+      detailsBarcodes += result.detectedBarcodes[i].value
+      // Omit type and mutiple
+    }
+  }
+  return detailsBarcodes
+}
+
 export default anyline

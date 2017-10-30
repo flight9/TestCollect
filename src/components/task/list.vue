@@ -16,6 +16,9 @@
     <q-btn @click="scan">
       <q-icon name="fullscreen" />
     </q-btn>
+    <q-btn @click="scanFake">
+      <q-icon name="map" />
+    </q-btn>
     <q-btn color="primary" class="full-width fixed-bottom" @click="next" big>
       Next
     </q-btn>
@@ -86,7 +89,8 @@
     QToolbarTitle,
     QBtn,
     QIcon,
-    QSearch
+    QSearch,
+    Dialog
   } from 'quasar'
   import anyline from 'src/api/tri_anyline'
   export default {
@@ -96,7 +100,8 @@
       QToolbarTitle,
       QBtn,
       QIcon,
-      QSearch
+      QSearch,
+      Dialog
     },
     data () {
       return {
@@ -118,23 +123,14 @@
         anyline.energy.scan('AUTO_ANALOG_DIGITAL_METER', this.onSuccess)
       },
       onSuccess (result) {
-        // Unlock
-        localStorage.setItem('hasStartedAnyline', false)
-        console.log('Energy result: ' + JSON.stringify(result))
-
-        // Parse barcode
-        if (result.detectedBarcodes) {
-          var detailsBarcodes = ''
-          for (var i = 0; i < result.detectedBarcodes.length; i++) {
-            detailsBarcodes += result.detectedBarcodes[i].value
-            // Omit type and mutiple
-          }
-        }
+        // Unlock & parse Barcode
+        let detailsBarcodes = anyline.parseBarcode(result)
 
         // Reading
         let sc = this.$parent.$parent.scan_result
         sc.reading = result.reading
         sc.barcode = detailsBarcodes
+        sc.npv = 'normal'
         sc.photo_src = result.imagePath
         sc.tid = 0
 
@@ -148,8 +144,41 @@
           return
         }
 
-        // prompt to select npv
-
+        let useNPV = true
+        if (useNPV) {
+          // prompt to select npv
+          Dialog.create({
+            title: 'Selection',
+            message: 'You shoule select the npv of this scan result.',
+            form: {
+              option: {
+                type: 'radio',
+                model: 'normal',
+                inline: true, // optional
+                items: [
+                  {label: 'Normal', value: 'normal'},
+                  {label: 'Peak', value: 'peak'},
+                  {label: 'Valley', value: 'valley'}
+                ]
+              }
+            },
+            buttons: [
+              'Cancel',
+              {
+                label: 'Ok',
+                handler: (data) => {
+                  sc.npv = data.option
+                  this.$router.push('/task/result')
+                }
+              }
+            ]
+          })
+        }
+        else {
+          this.$router.push('/task/result')
+        }
+      },
+      scanFake () {
         this.$router.push('/task/result')
       }
     }
