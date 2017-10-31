@@ -25,7 +25,8 @@
             "cordova-plugin-whitelist": {},
             "io-anyline-cordova": {},
             "cordova-plugin-network-information": {},
-            "cordova-plugin-file-transfer": {}
+            "cordova-plugin-file-transfer": {},
+            "cordova-plugin-file": {}
         },
         "platforms": [
             "android",
