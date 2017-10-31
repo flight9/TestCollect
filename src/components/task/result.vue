@@ -69,6 +69,7 @@
     QSelect
   } from 'quasar'
   import anyline from 'src/api/tri_anyline'
+  import _glb from 'src/components/global'
   const { getScrollTarget, setScrollPosition } = scroll
   export default {
     components: {
@@ -113,7 +114,7 @@
     },
     computed: {},
     created: function () {
-      let sc = this.$parent.$parent.scan_result
+      let sc = _glb.scanResult
       if (sc.tid === 0) {
         this.input_reading = this.final_reading = sc.reading
         this.barcode = sc.barcode
@@ -180,7 +181,7 @@
         var options = new FileUploadOptions()
         options.fileKey = 'file'
         options.fileName = fileURL.substr(fileURL.lastIndexOf('/') + 1)
-        options.mimeType = 'text/plain'
+        options.mimeType = 'text/plain' // or image/jpeg
 
         var params = {}
         params.value1 = 'test'

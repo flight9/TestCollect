@@ -93,6 +93,7 @@
     Dialog
   } from 'quasar'
   import anyline from 'src/api/tri_anyline'
+  import _glb from 'src/components/global'
   export default {
     components: {
       QLayout,
@@ -127,7 +128,7 @@
         let detailsBarcodes = anyline.parseBarcode(result)
 
         // Reading
-        let sc = this.$parent.$parent.scan_result
+        let sc = _glb.scanResult
         sc.reading = result.reading
         sc.barcode = detailsBarcodes
         sc.npv = 'normal'
