@@ -9,6 +9,8 @@
 /*
  * Root component
  */
+import registerEvents from 'src/api/tri_events'
+registerEvents()
 export default {}
 </script>
 
