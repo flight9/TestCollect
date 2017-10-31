@@ -163,12 +163,35 @@
         setScrollPosition(page, 1000, 500) // 1000 is a number big enough
       },
       complete () {
-        // var vm = this
-        this.$http.get('https://jsonplaceholder.typicode.com/users')
-          .then(function (response) {
-            let users = response.data
-            console.log(users)
-          })
+        // !! Assumes variable fileURL contains a valid URL to a text file on the device, eg fileEntry.toURL()
+        // var fileURL = require('statics/quasar-logo.png')
+        var fileURL = this.photo_src
+
+        var success = function (result) {
+          // console.log('Successful upload...')
+          alert(result.response)
+          // console.log('Code = ' + result.responseCode)
+        }
+
+        var fail = function (error) {
+          alert('An error has occurred: Code = ' + error.code)
+        }
+
+        var options = new FileUploadOptions()
+        options.fileKey = 'file'
+        options.fileName = fileURL.substr(fileURL.lastIndexOf('/') + 1)
+        options.mimeType = 'text/plain'
+
+        var params = {}
+        params.value1 = 'test'
+        params.value2 = 'param'
+        options.params = params
+
+        const SERVER = 'http://posttestserver.com/post.php?dir=example'
+        var ft = new FileTransfer()
+        // SERVER must be a URL that can handle the request, like
+        // http://some.server.com/upload.php
+        ft.upload(fileURL, encodeURI(SERVER), success, fail, options)
       },
       scan () {
         anyline.energy.scan('AUTO_ANALOG_DIGITAL_METER', this.onSuccess)
