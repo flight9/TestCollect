@@ -13,6 +13,8 @@
         "cordova-android": "^6.2.3",
         "cordova-browser": "^4.1.0",
         "cordova-plugin-crosswalk-webview": "^2.3.0",
+        "cordova-plugin-file": "^4.0.0",
+        "cordova-plugin-file-transfer": "^1.6.3",
         "cordova-plugin-network-information": "^1.3.3",
         "cordova-plugin-whitelist": "^1.3.2",
         "io-anyline-cordova": "^3.17.0"
@@ -22,7 +24,8 @@
             "cordova-plugin-crosswalk-webview": {},
             "cordova-plugin-whitelist": {},
             "io-anyline-cordova": {},
-            "cordova-plugin-network-information": {}
+            "cordova-plugin-network-information": {},
+            "cordova-plugin-file-transfer": {}
         },
         "platforms": [
             "android",
