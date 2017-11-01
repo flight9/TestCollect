@@ -8,11 +8,11 @@ function registerEvents () {
 //
 function onDeviceReady () {
   console.log('deviceready...')
-  document.addEventListener('volumedownbutton', onVolumeDownKeyDown, false)
+  // document.addEventListener('volumedownbutton', onVolumeDownKeyDown, false)
 }
 
 function onVolumeDownKeyDown () {
-  alert('volumedownbutton')
+  // alert('volumedownbutton')
 }
 
 export default registerEvents
