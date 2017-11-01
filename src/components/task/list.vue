@@ -13,11 +13,14 @@
         }
       }]"
     />
-    <q-btn @click="scan">
+    <q-btn @click="scanMeter">
       <q-icon name="fullscreen" />
     </q-btn>
     <q-btn @click="scanFake">
-      <q-icon name="map" />
+      Redirect
+    </q-btn>
+    <q-btn @click="scanBarcode">
+      Barcode
     </q-btn>
     <q-btn color="primary" class="full-width fixed-bottom" @click="next" big>
       Next
@@ -120,67 +123,70 @@
       searchIt: function () {
         alert('search')
       },
-      scan () {
-        anyline.energy.scan('AUTO_ANALOG_DIGITAL_METER', this.onSuccess)
-      },
-      onSuccess (result) {
-        // Unlock & parse Barcode
-        let detailsBarcodes = anyline.parseBarcode(result)
+      scanMeter () {
+        anyline.energy.scan('AUTO_ANALOG_DIGITAL_METER').then((result) => {
+          // Reading
+          let sc = _glb.scanResult
+          sc.reading = result.reading
+          sc.barcode = anyline.energy.parseBarcode(result)
+          sc.npv = 'normal'
+          sc.photo_src = result.imagePath
+          sc.tid = 0
 
-        // Reading
-        let sc = _glb.scanResult
-        sc.reading = result.reading
-        sc.barcode = detailsBarcodes
-        sc.npv = 'normal'
-        sc.photo_src = result.imagePath
-        sc.tid = 0
+          // Empty?
+          if (!sc.barcode) {
+            alert('Error: no barcode!')
+            return
+          }
 
-        if (!sc.barcode) {
-          alert('Error: no barcode!')
-          return
-        }
+          if (!sc.reading) {
+            alert('Error: no reading!')
+            return
+          }
 
-        if (!sc.reading) {
-          alert('Error: no reading!')
-          return
-        }
-
-        let useNPV = true
-        if (useNPV) {
-          // prompt to select npv
-          Dialog.create({
-            title: 'Selection',
-            message: 'You shoule select the npv of this scan result.',
-            form: {
-              option: {
-                type: 'radio',
-                model: 'normal',
-                inline: true, // optional
-                items: [
-                  {label: 'Normal', value: 'normal'},
-                  {label: 'Peak', value: 'peak'},
-                  {label: 'Valley', value: 'valley'}
-                ]
-              }
-            },
-            buttons: [
-              'Cancel',
-              {
-                label: 'Ok',
-                handler: (data) => {
-                  sc.npv = data.option
-                  this.$router.push('/task/result')
+          // Which MPV?
+          let useNPV = true
+          if (useNPV) {
+            // prompt to select npv
+            Dialog.create({
+              title: 'Selection',
+              message: 'You shoule select the npv of this scan result.',
+              form: {
+                option: {
+                  type: 'radio',
+                  model: 'normal',
+                  inline: true, // optional
+                  items: [
+                    {label: 'Normal', value: 'normal'},
+                    {label: 'Peak', value: 'peak'},
+                    {label: 'Valley', value: 'valley'}
+                  ]
                 }
-              }
-            ]
-          })
-        }
-        else {
-          this.$router.push('/task/result')
-        }
+              },
+              buttons: [
+                'Cancel',
+                {
+                  label: 'Ok',
+                  handler: (data) => {
+                    sc.npv = data.option
+                    this.$router.push('/task/result')
+                  }
+                }
+              ]
+            })
+          }
+          else {
+            this.$router.push('/task/result')
+          }
+        })
       },
       scanFake () {
         this.$router.push('/task/result')
+      },
+      scanBarcode () {
+        anyline.barcode.scan().then((result) => {
+          alert(result.value)
+        })
       }
     }
   }

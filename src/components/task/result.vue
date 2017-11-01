@@ -178,27 +178,13 @@
         })
       },
       scan () {
-        anyline.energy.scan('AUTO_ANALOG_DIGITAL_METER', this.onSuccess)
-      },
-      onSuccess (result) {
-        // Unlock
-        localStorage.setItem('hasStartedAnyline', false)
-        console.log('Energy result: ' + JSON.stringify(result))
-
-        // Parse barcode
-        if (result.detectedBarcodes) {
-          var detailsBarcodes = ''
-          for (var i = 0; i < result.detectedBarcodes.length; i++) {
-            detailsBarcodes += result.detectedBarcodes[i].value
-            // Omit type and mutiple
-          }
-        }
-
-        // Reading
-        // Todo: check the new barcode is the same barcode
-        this.final_reading = this.input_reading = result.reading
-        this.photo_src = result.imagePath
-        this.barcode = detailsBarcodes
+        anyline.energy.scan('AUTO_ANALOG_DIGITAL_METER').then((result) => {
+          // Reading
+          // Todo: check the new barcode is the same barcode
+          this.final_reading = this.input_reading = result.reading
+          this.photo_src = result.imagePath
+          this.barcode = anyline.energy.parseBarcode(result)
+        })
       },
       photo () {
         camera.takeMeter().then((imageURI) => {
