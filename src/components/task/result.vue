@@ -165,6 +165,8 @@
         setScrollPosition(page, 1000, 500) // 1000 is a number big enough
       },
       complete () {
+        /* global FileUploadOptions FileTransfer */
+        /* eslint no-undef: "error" */
         // !! Assumes variable fileURL contains a valid URL to a text file on the device, eg fileEntry.toURL()
         // var fileURL = require('statics/quasar-logo.png')
         var fileURL = this.photo_src
@@ -182,7 +184,7 @@
         var options = new FileUploadOptions()
         options.fileKey = 'file'
         options.fileName = fileURL.substr(fileURL.lastIndexOf('/') + 1)
-        options.mimeType = 'text/plain' // or image/jpeg
+        options.mimeType = 'image/jpeg' // or text/plain
 
         var params = {}
         params.value1 = 'test'
@@ -191,8 +193,6 @@
 
         const SERVER = 'http://posttestserver.com/post.php?dir=example'
         var ft = new FileTransfer()
-        // SERVER must be a URL that can handle the request, like
-        // http://some.server.com/upload.php
         ft.upload(fileURL, encodeURI(SERVER), success, fail, options)
       },
       scan () {

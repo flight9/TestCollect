@@ -1,4 +1,5 @@
-
+/* global Camera */
+/* eslint no-undef: "error" */
 const camera = {
   takeMeter () {
     return new Promise((resolve, reject) => {
@@ -13,7 +14,7 @@ const camera = {
 
       var options = {
         quality: 50,
-        destinationType: 1, // Camera.DestinationType.FILE_URI,
+        destinationType: Camera.DestinationType.FILE_URI,
         targetHeight: 720,
         targetWidth: 540,
         correctOrientation: true
