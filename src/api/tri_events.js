@@ -11,8 +11,8 @@ function onDeviceReady () {
   // document.addEventListener('volumedownbutton', onVolumeDownKeyDown, false)
 }
 
-function onVolumeDownKeyDown () {
-  // alert('volumedownbutton')
-}
+// function onVolumeDownKeyDown () {
+//   alert('volumedownbutton')
+// }
 
 export default registerEvents

@@ -23,7 +23,7 @@
             <img :src="photo_src" width="250"/>
           </td>
           <td class="text-right">
-            <q-btn @click="" small>
+            <q-btn @click="photo" small>
               <q-icon name="edit" />
             </q-btn>
           </td>
@@ -70,6 +70,7 @@
   } from 'quasar'
   import anyline from 'src/api/tri_anyline'
   import _glb from 'src/components/global'
+  import camera from 'src/api/tri_camera'
   const { getScrollTarget, setScrollPosition } = scroll
   export default {
     components: {
@@ -216,6 +217,12 @@
         this.final_reading = this.input_reading = result.reading
         this.photo_src = result.imagePath
         this.barcode = detailsBarcodes
+      },
+      photo () {
+        camera.takeMeter().then((imageURI) => {
+          this.photo_src = imageURI
+          alert(imageURI)
+        })
       }
     }
   }
