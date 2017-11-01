@@ -12,6 +12,8 @@
     "dependencies": {
         "cordova-android": "^6.2.3",
         "cordova-browser": "^4.1.0",
+        "cordova-plugin-camera": "^2.4.1",
+        "cordova-plugin-compat": "^1.1.0",
         "cordova-plugin-crosswalk-webview": "^2.3.0",
         "cordova-plugin-file": "^4.0.0",
         "cordova-plugin-file-transfer": "^1.6.3",
@@ -26,7 +28,8 @@
             "io-anyline-cordova": {},
             "cordova-plugin-network-information": {},
             "cordova-plugin-file-transfer": {},
-            "cordova-plugin-file": {}
+            "cordova-plugin-file": {},
+            "cordova-plugin-camera": {}
         },
         "platforms": [
             "android",
