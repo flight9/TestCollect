@@ -71,6 +71,7 @@
   import anyline from 'src/api/tri_anyline'
   import _glb from 'src/components/global'
   import camera from 'src/api/tri_camera'
+  import transfer from 'src/api/tri_transfer'
   const { getScrollTarget, setScrollPosition } = scroll
   export default {
     components: {
@@ -165,35 +166,16 @@
         setScrollPosition(page, 1000, 500) // 1000 is a number big enough
       },
       complete () {
-        /* global FileUploadOptions FileTransfer */
-        /* eslint no-undef: "error" */
-        // !! Assumes variable fileURL contains a valid URL to a text file on the device, eg fileEntry.toURL()
-        // var fileURL = require('statics/quasar-logo.png')
-        var fileURL = this.photo_src
-
-        var success = function (result) {
-          // console.log('Successful upload...')
+        let params = {
+          tid: 1234,
+          commit: 'ok',
+          reading: this.final_reading
+        }
+        transfer.uploadImage(this.photo_src, 'photo', params).then((result) => {
           alert(result.response)
-          // console.log('Code = ' + result.responseCode)
-        }
-
-        var fail = function (error) {
-          alert('An error has occurred: Code = ' + error.code)
-        }
-
-        var options = new FileUploadOptions()
-        options.fileKey = 'file'
-        options.fileName = fileURL.substr(fileURL.lastIndexOf('/') + 1)
-        options.mimeType = 'image/jpeg' // or text/plain
-
-        var params = {}
-        params.value1 = 'test'
-        params.value2 = 'param'
-        options.params = params
-
-        const SERVER = 'http://posttestserver.com/post.php?dir=example'
-        var ft = new FileTransfer()
-        ft.upload(fileURL, encodeURI(SERVER), success, fail, options)
+        }).catch((error) => {
+          alert(error.source)
+        })
       },
       scan () {
         anyline.energy.scan('AUTO_ANALOG_DIGITAL_METER', this.onSuccess)
