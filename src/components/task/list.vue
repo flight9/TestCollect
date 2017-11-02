@@ -13,7 +13,8 @@
         }
       }]"
     />
-    <q-btn @click="scanMeter">
+    <!--cordova-->
+    <q-btn @click="scanMeter" v-if="inCordova">
       <q-icon name="fullscreen" />
     </q-btn>
     <q-btn @click="scanFake">
@@ -25,7 +26,15 @@
     <q-btn color="primary" class="full-width fixed-bottom" @click="next" big>
       Next
     </q-btn>
+    <!--if wechat-->
+    <!--take photo button using wechat-->
+    <!--if cordova-->
+    <!--take photo button using coedova api-->
+    <!--if web-->
+    <!--show photo upload form-->
+
   </div>
+
 
   <!--<table class="q-table">-->
     <!--<thead>-->
@@ -107,6 +116,9 @@
       QSearch,
       Dialog
     },
+    created () {
+      console.log(this.$q.platform)
+    },
     data () {
       return {
         search_text: null,
@@ -114,6 +126,14 @@
           icon: 'search',
           handler: 'search'
         }]
+      }
+    },
+    computed: {
+      inCordova () {
+        return this.$q.platform.is.cordova
+      },
+      inWechat () {
+        return /micromessenger/.test(navigator.userAgent.toLowerCase())
       }
     },
     methods: {
