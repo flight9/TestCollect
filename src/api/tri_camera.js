@@ -8,6 +8,9 @@ const camera = {
       }
 
       var onFail = (message) => {
+        if (message === 'Camera cancelled.') {
+          return
+        }
         alert('Failed because: ' + message)
         reject(message)
       }
