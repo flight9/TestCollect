@@ -10,7 +10,7 @@
         <thead>
         <tr>
           <th class="text-left capitalize" width="90%">{{npv}}</th>
-          <th class="text-right">
+          <th class="text-center">
             <q-btn @click="scan" small>
               <q-icon name="fullscreen" />
             </q-btn>
@@ -22,7 +22,7 @@
           <td class="text-center">
             <img :src="photo_src" width="250"/>
           </td>
-          <td class="text-right">
+          <td class="text-center">
             <q-btn @click="photo" small>
               <q-icon name="edit" />
             </q-btn>
@@ -34,7 +34,7 @@
                      type="number" :readonly="!reading_editing" align="right" @click="scrollBottom"
             />
           </td>
-          <td class="text-right">
+          <td class="text-center">
             <q-btn @click="toggleReadingEdit" small>
               <q-icon :name="button_icon" />
             </q-btn>
@@ -42,6 +42,9 @@
         </tr>
         <tr>
           <td colspan="2">
+            <q-alert color="amber" icon="warning":actions="[{label:'Snooze', handler:() => {}}]">
+              You have a warning for reading.
+            </q-alert>
             <q-select
               v-model="comment"
               stack-label="Comment?"
@@ -66,7 +69,8 @@
     QInput,
     scroll,
     Alert,
-    QSelect
+    QSelect,
+    QAlert
   } from 'quasar'
   import anyline from 'src/api/tri_anyline'
   import _glb from 'src/components/global'
@@ -78,7 +82,8 @@
       QBtn,
       QIcon,
       QInput,
-      QSelect
+      QSelect,
+      QAlert
     },
     props: {
     },
@@ -201,5 +206,4 @@
   #main-div
     padding 5px
     border: 2px solid $grey-5
-
 </style>

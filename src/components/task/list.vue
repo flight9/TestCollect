@@ -116,9 +116,6 @@
       QSearch,
       Dialog
     },
-    created () {
-      console.log(this.$q.platform)
-    },
     data () {
       return {
         search_text: null,
