@@ -18,7 +18,8 @@
     "quasar-framework": "^0.14.4",
     "vue": "^2.5.0",
     "vue-router": "^3.0.1",
-    "vuex": "^3.0.0"
+    "vuex": "^3.0.0",
+    "weixin-js-sdk": "^1.2.0"
   },
   "devDependencies": {
     "autoprefixer": "^6.4.0",
