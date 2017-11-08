@@ -5,54 +5,53 @@
     <h6 class="text-center">Tid: {{tid}}</h6>
     <h6 class="text-center">PM: {{barcode}}</h6>
 
-    <div id="main-div" class="bg-lime-3 round-borders">
-      <table class="q-table">
-        <thead>
-        <tr>
-          <th class="text-left capitalize" width="90%">{{npv}}</th>
-          <th class="text-center">
-            <q-btn @click="scan" small>
-              <q-icon name="fullscreen" />
-            </q-btn>
-          </th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr>
-          <td class="text-center">
-            <img :src="photo_src" width="250"/>
-          </td>
-          <td class="text-center">
-            <photo-cordova @success="onPhoto"></photo-cordova>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <q-input ref="reading_input" v-model.trim="input_reading" stack-label="Reading" error
-                     type="number" :readonly="!reading_editing" align="right" @click="scrollBottom"
-            />
-          </td>
-          <td class="text-center">
-            <q-btn @click="toggleReadingEdit" small>
-              <q-icon :name="button_icon" />
-            </q-btn>
-          </td>
-        </tr>
-        <tr>
-          <td colspan="2">
-            <q-alert color="amber" icon="warning":actions="[{label:'Snooze', handler:() => {}}]">
-              You have a warning for reading.
-            </q-alert>
-            <q-select
-              v-model="comment"
-              stack-label="Comment?"
-              :options="commentOptions"
-            />
-          </td>
-        </tr>
-        </tbody>
-      </table>
-    </div>
+    <!--<div id="main-div" class="bg-lime-3 round-borders">-->
+    <table class="q-table">
+      <thead>
+      <tr>
+        <th class="text-left capitalize" width="90%">{{npv}}</th>
+        <th class="text-center">
+          <q-btn @click="scan" small>
+            <q-icon name="fullscreen" />
+          </q-btn>
+        </th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr>
+        <td class="text-center">
+          <img :src="photo_src" width="250"/>
+        </td>
+        <td class="text-center">
+          <photo-cordova @success="onPhoto"></photo-cordova>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <q-input ref="reading_input" v-model.trim="input_reading" stack-label="Reading" error
+                   type="number" :readonly="!reading_editing" align="right" @click="scrollBottom"
+          />
+        </td>
+        <td class="text-center">
+          <q-btn @click="toggleReadingEdit" small>
+            <q-icon :name="button_icon" />
+          </q-btn>
+        </td>
+      </tr>
+      <tr>
+        <td colspan="2">
+          <q-alert color="amber" icon="warning":actions="[{label:'Snooze', handler:() => {}}]">
+            You have a warning for reading.
+          </q-alert>
+          <q-select
+            v-model="comment"
+            stack-label="Comment?"
+            :options="commentOptions"
+          />
+        </td>
+      </tr>
+      </tbody>
+    </table>
 
     <q-btn color="primary" class="full-width fixed-bottom" @click="complete" big v-show="footer_show">
       Complete
@@ -71,7 +70,7 @@
     QAlert
   } from 'quasar'
   import anyline from 'src/api/tri_anyline'
-  import _glb from 'src/components/global'
+  import global_ from 'src/components/global'
   import transfer from 'src/api/tri_transfer'
   import PhotoCordova from 'src/components/tri_component/photo_cordova.vue'
   const { getScrollTarget, setScrollPosition } = scroll
@@ -120,7 +119,7 @@
     },
     computed: {},
     created: function () {
-      let sc = _glb.scanResult
+      let sc = global_.scanResult
       if (sc.tid === 0) {
         this.input_reading = this.final_reading = sc.reading
         this.barcode = sc.barcode
