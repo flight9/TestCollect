@@ -224,4 +224,8 @@ anyline.barcode = {
   }
 }
 
+anyline.unlockScan = function () {
+  localStorage.setItem('hasStartedAnyline', false)
+}
+
 export default anyline
