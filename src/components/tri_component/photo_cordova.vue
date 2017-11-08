@@ -12,7 +12,7 @@
     QIcon
   } from 'quasar'
   export default {
-    component: {
+    components: {
       QBtn,
       QIcon
     },
@@ -38,7 +38,7 @@
       takephoto () {
         return new Promise((resolve, reject) => {
           var onSuccess = (imageURI) => {
-            this.$emit('success', imageURI)
+            this.$emit('success', {imageURI})
             resolve(imageURI)
           }
 

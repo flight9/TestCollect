@@ -23,9 +23,7 @@
             <img :src="photo_src" width="250"/>
           </td>
           <td class="text-center">
-            <q-btn @click="photo" small>
-              <q-icon name="edit" />
-            </q-btn>
+            <photo-cordova @success="onPhoto"></photo-cordova>
           </td>
         </tr>
         <tr>
@@ -74,8 +72,8 @@
   } from 'quasar'
   import anyline from 'src/api/tri_anyline'
   import _glb from 'src/components/global'
-  import camera from 'src/api/tri_camera'
   import transfer from 'src/api/tri_transfer'
+  import PhotoCordova from 'src/components/tri_component/photo_cordova.vue'
   const { getScrollTarget, setScrollPosition } = scroll
   export default {
     components: {
@@ -83,7 +81,8 @@
       QIcon,
       QInput,
       QSelect,
-      QAlert
+      QAlert,
+      PhotoCordova
     },
     props: {
     },
@@ -191,11 +190,9 @@
           this.barcode = anyline.energy.parseBarcode(result)
         })
       },
-      photo () {
-        camera.takeMeter().then((imageURI) => {
-          this.photo_src = imageURI
-          alert(imageURI)
-        })
+      onPhoto (result) {
+        this.photo_src = result.imageURI
+        alert(result.imageURI)
       }
     }
   }
