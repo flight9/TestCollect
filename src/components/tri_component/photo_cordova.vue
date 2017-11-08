@@ -17,11 +17,11 @@
       QIcon
     },
     props: {
-      small: {
+      small: { // button small size
         type: Boolean,
         default: true
       },
-      options: {
+      options: { // custom options for photo
         type: Object,
         default  () {
           return {
@@ -47,7 +47,7 @@
               return
             }
             alert('Failed because: ' + message)
-            this.$emit('fail', message)
+            this.$emit('fail', {message})
             reject(message)
           }
 
