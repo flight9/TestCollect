@@ -32,7 +32,7 @@ module.exports = {
     // auto open browser or not
     openBrowser: true,
     publicPath: '/',
-    port: 8080,
+    port: 9494,
 
     // If for example you are using Quasar Play
     // to generate a QR code then on each dev (re)compilation
@@ -44,7 +44,12 @@ module.exports = {
     // Proxy your API if using any.
     // Also see /build/script.dev.js and search for "proxy api requests"
     // https://github.com/chimurai/http-proxy-middleware
-    proxyTable: {}
+    proxyTable: {
+      '/api/jsconfig': {
+        target: 'http://localhost/testwechat/jsconfig.php', // 设置你调用的接口域名和端口号 别忘了加http
+        changeOrigin: true
+      }
+    }
   }
 }
 

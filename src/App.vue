@@ -6,12 +6,17 @@
 </template>
 
 <script>
-/*
- * Root component
- */
-import registerEvents from 'src/api/tri_events'
-registerEvents()
-export default {}
+  /*
+   * Root component
+   */
+  import registerEvents from 'src/api/tri_events'
+  import wechat from 'src/api/tri_wechat'
+  registerEvents()
+  export default {
+    mounted () {
+      wechat.jsconfig()
+    }
+  }
 </script>
 
 <style></style>

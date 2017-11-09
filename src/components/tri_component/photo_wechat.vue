@@ -18,7 +18,7 @@
     props: {
       small: { // button small size
         type: Boolean,
-        default: true
+        default: false
       },
       options: { // custom options for photo
         type: Object,
@@ -34,13 +34,17 @@
     },
     methods: {
       takephoto () {
+        var that = this
         wx.chooseImage({
           count: 1, // 默认9
           sizeType: [this.options.compressed ? 'compressed' : 'original'], // 'original', 'compressed'
           sourceType: ['camera'], // 'album', 'camera'
           success: function (res) {
-            var localId = res.localIds[0] // localId可以作为img标签的src属性显示图片
+            var localId = res.localIds[0] // localId 可以作为 img 标签的 src 属性显示图片
             uploadPhoto(localId)
+          },
+          fail: function (res) {
+            alert(res.message)
           }
         })
 
@@ -50,11 +54,11 @@
             isShowProgressTips: 1, // 显示进度提示
             success: function (res) {
               var serverId = res.serverId
-              this.$emit('success', {serverId, localId})
+              that.$emit('success', {serverId, localId})
             },
             fail: function (res) {
               var message = res.errMsg
-              this.$emit('fail', {message})
+              that.$emit('fail', {message})
             }
           })
         }
