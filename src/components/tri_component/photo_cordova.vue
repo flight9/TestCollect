@@ -19,7 +19,7 @@
     props: {
       small: { // button small size
         type: Boolean,
-        default: true
+        default: false
       },
       options: { // custom options for photo
         type: Object,
