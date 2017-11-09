@@ -10,11 +10,11 @@
    * Root component
    */
   import registerEvents from 'src/api/tri_events'
-  import wechat from 'src/api/tri_wechat'
+//  import wechat from 'src/api/tri_wechat'
   registerEvents()
   export default {
     mounted () {
-      wechat.jsconfig()
+      // wechat.jsconfig()
     }
   }
 </script>

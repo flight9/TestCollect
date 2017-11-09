@@ -1,3 +1,5 @@
+// deprecated, now use photo_cordova.vue instead
+
 /* global Camera */
 /* eslint no-undef: "error" */
 const camera = {
