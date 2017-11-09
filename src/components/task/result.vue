@@ -25,6 +25,7 @@
         <td class="text-center">
           <photo-cordova @success="onPhoto" small></photo-cordova>
           <br/>
+          test:<qrscan-anyline @success="onQrscan" small></qrscan-anyline>
           <!--wx:<photo-wechat @success="onPhotoWx" small></photo-wechat>-->
           <!--wx:<qrscan-wechat @success="onQrscanWx" small></qrscan-wechat>-->
         </td>
@@ -76,6 +77,7 @@
   import global_ from 'src/components/global'
   import transfer from 'src/api/tri_transfer'
   import PhotoCordova from 'src/components/tri_component/photo_cordova.vue'
+  import QrscanAnyline from 'src/components/tri_component/qrscan_anyline.vue'
 //  import PhotoWechat from 'src/components/tri_component/photo_wechat.vue'
 //  import QrscanWechat from 'src/components/tri_component/qrscan_wechat.vue'
   const { getScrollTarget, setScrollPosition } = scroll
@@ -86,7 +88,8 @@
       QInput,
       QSelect,
       QAlert,
-      PhotoCordova
+      PhotoCordova,
+      QrscanAnyline
     },
     props: {
     },
@@ -197,6 +200,10 @@
       onPhoto (result) {
         this.photo_src = result.imageURI
         alert(result.imageURI)
+      },
+      onQrscan (result) {
+        this.photo_src = result.imagePath
+        alert(result.value)
       },
       onPhotoWx (result) {
         this.photo_src = result.localId
