@@ -9,20 +9,16 @@
       :after="[{
         icon:'search',
         handler () {
-          console.log('acting')
+          onSearch()
         }
       }]"
     />
     <!--cordova-->
-    <q-btn @click="scanMeter" v-if="inCordova">
-      <q-icon name="fullscreen" />
-    </q-btn>
+    <pmscan-anyline @success="onPmscan"></pmscan-anyline>
     <q-btn @click="scanFake">
-      Redirect
+      Continue
     </q-btn>
-    <q-btn @click="scanBarcode">
-      Barcode
-    </q-btn>
+    <qrscan-anyline @success="onQrscan"></qrscan-anyline>
     <q-btn color="primary" class="full-width fixed-bottom" @click="next" big>
       Next
     </q-btn>
@@ -104,8 +100,9 @@
     QSearch,
     Dialog
   } from 'quasar'
-  import anyline from 'src/api/tri_anyline'
-  import _glb from 'src/components/global'
+  import PmscanAnyline from 'src/components/tri_component/pmscan_anyline.vue'
+  import QrscanAnyline from 'src/components/tri_component/qrscan_anyline.vue'
+  import global_ from 'src/components/global'
   export default {
     components: {
       QLayout,
@@ -114,15 +111,13 @@
       QBtn,
       QIcon,
       QSearch,
-      Dialog
+      Dialog,
+      PmscanAnyline,
+      QrscanAnyline
     },
     data () {
       return {
-        search_text: null,
-        search_action: [{
-          icon: 'search',
-          handler: 'search'
-        }]
+        search_text: null
       }
     },
     computed: {
@@ -137,73 +132,66 @@
       next: function () {
         alert('next')
       },
-      searchIt: function () {
-        alert('search')
+      onSearch: function () {
+        alert('onSearch')
       },
-      scanMeter () {
-        anyline.energy.scan('AUTO_ANALOG_DIGITAL_METER').then((result) => {
-          // Reading
-          let sc = _glb.scanResult
-          sc.reading = result.reading
-          sc.barcode = anyline.energy.parseBarcode(result)
-          sc.npv = 'normal'
-          sc.photo_src = result.imagePath
-          sc.tid = 0
+      onPmscan (result) {
+        // Reading
+        let sc = global_.scanResult
+        sc.reading = result.reading
+        sc.barcode = result.barcode
+        sc.npv = 'normal'
+        sc.photo_src = result.imagePath
+        sc.tid = 0
 
-          // Empty?
-          if (!sc.barcode) {
-            alert('Error: no barcode!')
-            return
-          }
+        // Empty?
+        if (!sc.barcode) {
+          alert('Error: no barcode!')
+        }
+        if (!sc.reading) {
+          alert('Error: no reading!')
+        }
 
-          if (!sc.reading) {
-            alert('Error: no reading!')
-            return
-          }
-
-          // Which MPV?
-          let useNPV = true
-          if (useNPV) {
-            // prompt to select npv
-            Dialog.create({
-              title: 'Selection',
-              message: 'You shoule select the npv of this scan result.',
-              form: {
-                option: {
-                  type: 'radio',
-                  model: 'normal',
-                  inline: true, // optional
-                  items: [
-                    {label: 'Normal', value: 'normal'},
-                    {label: 'Peak', value: 'peak'},
-                    {label: 'Valley', value: 'valley'}
-                  ]
+        // Check the meter whether it has MPV?
+        let hasNPV = true
+        if (hasNPV) {
+          // prompt to select npv
+          Dialog.create({
+            title: 'Selection',
+            message: 'You shoule select the npv of this scan result.',
+            form: {
+              option: {
+                type: 'radio',
+                model: 'normal',
+                inline: true, // optional
+                items: [
+                  {label: 'Normal', value: 'normal'},
+                  {label: 'Peak', value: 'peak'},
+                  {label: 'Valley', value: 'valley'}
+                ]
+              }
+            },
+            buttons: [
+              'Cancel',
+              {
+                label: 'Ok',
+                handler: (data) => {
+                  sc.npv = data.option
+                  this.$router.push('/task/result')
                 }
-              },
-              buttons: [
-                'Cancel',
-                {
-                  label: 'Ok',
-                  handler: (data) => {
-                    sc.npv = data.option
-                    this.$router.push('/task/result')
-                  }
-                }
-              ]
-            })
-          }
-          else {
-            this.$router.push('/task/result')
-          }
-        })
+              }
+            ]
+          })
+        }
+        else {
+          this.$router.push('/task/result')
+        }
       },
       scanFake () {
         this.$router.push('/task/result')
       },
-      scanBarcode () {
-        anyline.barcode.scan().then((result) => {
-          alert(result.value)
-        })
+      onQrscan (result) {
+        alert(result.value)
       }
     }
   }
