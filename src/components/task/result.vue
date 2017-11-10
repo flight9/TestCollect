@@ -2,8 +2,7 @@
   <!-- if you want automatic padding use "layout-padding" class -->
   <div class="layout-padding" ref="page">
     <h6 class="text-center">A-101,HM,Electricity - DEC,2017</h6>
-    <h6 class="text-center">Tid: {{tid}}</h6>
-    <h6 class="text-center">PM: {{barcode}}</h6>
+    <h6 class="text-center">Tid: {{tid ? tid : '(empty)'}}</h6>
 
     <div id="main-div" class="bg-lime-3 round-borders">
     <table class="q-table">
@@ -17,13 +16,19 @@
       </thead>
       <tbody>
       <tr>
+        <td class="text-left">No: {{barcode ? barcode: '(empty)'}}</td>
+        <td class="text-center">
+          <qrscan-anyline @success="onQrscan" small></qrscan-anyline>
+        </td>
+      </tr>
+      <tr>
         <td class="text-center">
           <img :src="photo_src" class="responsive"/>
         </td>
         <td class="text-center">
           <photo-cordova @success="onPhoto" small></photo-cordova>
           <br/>
-          test:<qrscan-anyline @success="onQrscan" small></qrscan-anyline>
+          <!--test:-->
           <!--wx:<photo-wechat @success="onPhotoWx" small></photo-wechat>-->
           <!--wx:<qrscan-wechat @success="onQrscanWx" small></qrscan-wechat>-->
         </td>
@@ -42,12 +47,21 @@
       </tr>
       <tr>
         <td colspan="2">
-          <q-alert color="amber" icon="warning":actions="[{label:'Snooze', handler:() => {}}]">
-            You have a warning for reading.
+          <q-alert color="green" icon="help"v-model="needConfirm" :actions="[
+            {label:'Yes, it does', handler:() => {}},
+            {label:'No, I\'ll revise it.', handler:() => {}},
+          ]">
+            Does the reading match the photo?
+          </q-alert>
+          <q-alert color="amber" icon="warning" v-model="hasWarning">
+            The reading is less than that of last month. Why? Pls comment below.
+          </q-alert>
+          <q-alert color="error" icon="warning" v-model="hasWarning">
+            The meter NO. is empty. Please scan the barcode.
           </q-alert>
           <q-select
             v-model="comment"
-            stack-label="Comment?"
+            stack-label="Comment:"
             :options="commentOptions"
           />
         </td>
@@ -104,6 +118,9 @@
         reading_editing: false,
         footer_show: true,
         button_icon: 'edit',
+        needConfirm: true,
+        hasWarning: true,
+        hasError: true,
         comment: '',
         commentOptions: [
           {

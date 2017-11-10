@@ -1,6 +1,6 @@
 <template>
   <q-btn @click="pmscan" :small="small">
-    <q-icon name="fullscreen" />
+    <q-icon name="aspect_ratio" />
   </q-btn>
 </template>
 
