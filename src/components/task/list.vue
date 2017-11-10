@@ -13,12 +13,13 @@
         }
       }]"
     />
-    <!--cordova-->
-    <pmscan-anyline @success="onPmscan"></pmscan-anyline>
-    <q-btn @click="scanFake">
-      Continue
-    </q-btn>
-    <qrscan-anyline @success="onQrscan"></qrscan-anyline>
+    <div class="row justify-center">
+      <pmscan-anyline @success="onPmscan"></pmscan-anyline>
+      <q-btn @click="scanFake">
+        Continue
+      </q-btn>
+      <qrscan-anyline @success="onQrscan"></qrscan-anyline>
+    </div>
     <q-btn color="primary" class="full-width fixed-bottom" @click="next" big>
       Next
     </q-btn>

@@ -16,7 +16,7 @@
       </thead>
       <tbody>
       <tr>
-        <td class="text-left">No: {{barcode ? barcode: '(empty)'}}</td>
+        <td class="text-left">No. {{barcode ? barcode: '(empty)'}}</td>
         <td class="text-center">
           <qrscan-anyline @success="onQrscan" small></qrscan-anyline>
         </td>
