@@ -108,6 +108,9 @@ anyline.energy = {
           '\noutline: ' + result.outline
         console.log(output)
 
+        // add parsed barcode for easy
+        result.barcode = detailsBarcodes
+
         resolve(result)
       }
 

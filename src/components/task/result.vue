@@ -5,22 +5,20 @@
     <h6 class="text-center">Tid: {{tid}}</h6>
     <h6 class="text-center">PM: {{barcode}}</h6>
 
-    <!--<div id="main-div" class="bg-lime-3 round-borders">-->
+    <div id="main-div" class="bg-lime-3 round-borders">
     <table class="q-table">
       <thead>
       <tr>
         <th class="text-left capitalize" width="90%">{{npv}}</th>
         <th class="text-center">
-          <q-btn @click="scan" small>
-            <q-icon name="fullscreen" />
-          </q-btn>
+          <pmscan-anyline @success="onPmscan" small></pmscan-anyline>
         </th>
       </tr>
       </thead>
       <tbody>
       <tr>
         <td class="text-center">
-          <img :src="photo_src" width="250"/>
+          <img :src="photo_src" class="responsive"/>
         </td>
         <td class="text-center">
           <photo-cordova @success="onPhoto" small></photo-cordova>
@@ -56,6 +54,7 @@
       </tr>
       </tbody>
     </table>
+    </div>
 
     <q-btn color="primary" class="full-width fixed-bottom" @click="complete" big v-show="footer_show">
       Complete
@@ -73,11 +72,11 @@
     QSelect,
     QAlert
   } from 'quasar'
-  import anyline from 'src/api/tri_anyline'
   import global_ from 'src/components/global'
   import transfer from 'src/api/tri_transfer'
   import PhotoCordova from 'src/components/tri_component/photo_cordova.vue'
   import QrscanAnyline from 'src/components/tri_component/qrscan_anyline.vue'
+  import PmscanAnyline from 'src/components/tri_component/pmscan_anyline.vue'
 //  import PhotoWechat from 'src/components/tri_component/photo_wechat.vue'
 //  import QrscanWechat from 'src/components/tri_component/qrscan_wechat.vue'
   const { getScrollTarget, setScrollPosition } = scroll
@@ -89,7 +88,8 @@
       QSelect,
       QAlert,
       PhotoCordova,
-      QrscanAnyline
+      QrscanAnyline,
+      PmscanAnyline
     },
     props: {
     },
@@ -188,14 +188,10 @@
           alert(error.source)
         })
       },
-      scan () {
-        anyline.energy.scan('AUTO_ANALOG_DIGITAL_METER').then((result) => {
-          // Reading
-          // Todo: check the new barcode is the same barcode
-          this.final_reading = this.input_reading = result.reading
-          this.photo_src = result.imagePath
-          this.barcode = anyline.energy.parseBarcode(result)
-        })
+      onPmscan (result) {
+        this.final_reading = this.input_reading = result.reading
+        this.photo_src = result.imagePath
+        this.barcode = result.barcode
       },
       onPhoto (result) {
         this.photo_src = result.imageURI
