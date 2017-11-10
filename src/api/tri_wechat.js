@@ -1,5 +1,6 @@
 /**
  * Wechat js API
+ * photo_wechat.vue and qrscan_wechat.vue depend on jsconfig()
  */
 import wx from 'weixin-js-sdk'
 import axios from 'axios'
@@ -28,6 +29,9 @@ const wechat = {
         // alert('jssdk ready')
       })
     })
+  },
+  inWechat () {
+    return /micromessenger/.test(navigator.userAgent.toLowerCase())
   }
 }
 
