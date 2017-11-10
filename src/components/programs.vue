@@ -12,7 +12,7 @@
       <q-toolbar-title class="text-center">
         Auchan YP01 Programs
       </q-toolbar-title>
-      <q-btn flat @click="rightMenu">
+      <q-btn flat @click="$refs.layout.toggleRight()">
         <q-icon name="add" />
       </q-btn>
     </q-toolbar>
@@ -34,6 +34,21 @@
       <!--</q-card-main>-->
     </q-card>
 
+    <!-- Right Side Panel -->
+    <div slot="right">
+      <q-list no-border link inset-separator>
+        <q-list-header>Essential Links</q-list-header>
+        <q-item @click="unlockAnyline()">
+          <q-item-side icon="lock_open" />
+          <q-item-main label="Unlock Anyline" sublabel="only for abnormal" />
+        </q-item>
+        <q-side-link item to="/others">
+          <q-item-side icon="map" />
+          <q-item-main label="To other page" sublabel="only for test" />
+        </q-side-link>
+      </q-list>
+    </div>
+
     <!--<router-view />-->
 
 
@@ -51,9 +66,16 @@
     QCardTitle,
     QCardMain,
     QCardMedia,
-    QCardActions
+    QCardActions,
+    QList,
+    QListHeader,
+    QSideLink,
+    QItem,
+    QItemSide,
+    QItemMain
   } from 'quasar'
   import { mapState } from 'vuex'
+  import anyline from 'src/api/tri_anyline'
   export default {
     components: {
       QLayout,
@@ -65,7 +87,13 @@
       QCardTitle,
       QCardMain,
       QCardMedia,
-      QCardActions
+      QCardActions,
+      QList,
+      QListHeader,
+      QSideLink,
+      QItem,
+      QItemSide,
+      QItemMain
     },
     data () {
       return {
@@ -82,8 +110,11 @@
       leftMenu: function () {
         alert('leftMenu')
       },
-      rightMenu: function () {
-        alert('rightMenu')
+      unlockAnyline () {
+        this.$refs.layout.hideCurrentSide(() => {
+          anyline.unlockScan()
+          alert('Unlocked!')
+        })
       }
     }
   }
