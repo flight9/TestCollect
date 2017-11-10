@@ -39,8 +39,8 @@
           needResult: 1, //  默认为0，扫描结果由微信处理，1 则直接返回扫描结果
           scanType: this.scanType,
           success: function (res) {
-            var code = res.resultStr
-            that.$emit('success', {code})
+            var value = res.resultStr
+            that.$emit('success', {value})
           },
           fail: function (res) {
             var message = res.errMsg

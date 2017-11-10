@@ -206,7 +206,7 @@
         alert(result.serverId)
       },
       onQrscanWx (result) {
-        alert(result.code)
+        alert(result.value)
       }
     }
   }
@@ -215,6 +215,6 @@
 <style lang="stylus">
   @import '~variables'
   #main-div
-    padding 5px
+    padding 0px
     border: 2px solid $grey-5
 </style>
