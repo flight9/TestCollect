@@ -74,7 +74,6 @@
     QItemSide,
     QItemMain
   } from 'quasar'
-  import { mapState } from 'vuex'
   import anyline from 'src/api/tri_anyline'
   export default {
     components: {
@@ -100,11 +99,6 @@
         customer: 'Auchan',
         store: 'YP01'
       }
-    },
-    computed: {
-      ...mapState([
-        'user'
-      ])
     },
     methods: {
       leftMenu: function () {
