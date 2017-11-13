@@ -271,7 +271,7 @@
     // },
     // selection: 'multiple', // or 'single'
     messages: {
-      noData: '<i>warning</i> No data available to show.',
+      noData: '<i>warning</i> No data available.',
       noDataAfterFiltering: '<i>warning</i> No results. Please refine your search terms.'
     },
     labels: {

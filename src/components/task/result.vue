@@ -217,7 +217,7 @@
           reading: this.final_reading,
           comment: this.comment
         })
-        this.$router.push('/task/list')
+        this.$router.go(-1)
       },
       onPmscan (result) {
         this.final_reading = this.input_reading = result.reading

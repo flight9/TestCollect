@@ -40,7 +40,11 @@
         <q-list-header>Essential Links</q-list-header>
         <q-item @click="unlockAnyline()">
           <q-item-side icon="lock_open" />
-          <q-item-main label="Unlock Anyline" sublabel="only for abnormal" />
+          <q-item-main label="Unlock Scan" sublabel="only for test" />
+        </q-item>
+        <q-item @click="clearResult()">
+          <q-item-side icon="delete" />
+          <q-item-main label="Clear Result" sublabel="only for test" />
         </q-item>
         <q-side-link item to="/others">
           <q-item-side icon="map" />
@@ -75,6 +79,7 @@
     QItemMain
   } from 'quasar'
   import anyline from 'src/api/tri_anyline'
+  import { mapActions } from 'vuex'
   export default {
     components: {
       QLayout,
@@ -109,7 +114,14 @@
           anyline.unlockScan()
           alert('Unlocked!')
         })
-      }
+      },
+      clearResult () {
+        this.$refs.layout.hideCurrentSide(() => {
+          this.clearResults()
+          alert('Cleared!')
+        })
+      },
+      ...mapActions(['clearResults'])
     }
   }
 </script>
