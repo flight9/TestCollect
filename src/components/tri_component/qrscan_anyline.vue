@@ -1,6 +1,6 @@
 <template>
   <q-btn @click="qrscan" :small="small">
-    <q-icon name="fullscreen" />
+    <q-icon :name="icon" />
   </q-btn>
 </template>
 
@@ -19,6 +19,10 @@
       small: { // button small size
         type: Boolean,
         default: false
+      },
+      icon: { // custom icon
+        type: String,
+        default: 'fullscreen'
       },
       options: { // custom options
         type: Object,

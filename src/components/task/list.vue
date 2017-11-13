@@ -18,7 +18,7 @@
       <q-btn @click="scanFake">
         Continue
       </q-btn>
-      <qrscan-anyline @success="onQrscan"></qrscan-anyline>
+      <qrscan-anyline @success="onQrscan" icon="camera_alt"></qrscan-anyline>
     </div>
     <q-btn color="primary" class="full-width fixed-bottom" @click="next" big>
       Next
@@ -192,7 +192,13 @@
         this.$router.push('/task/result')
       },
       onQrscan (result) {
-        alert(result.value)
+        // Reading
+        let sc = global_.scanResult
+        sc.photo_src = result.imagePath
+        sc.barcode = result.value
+        sc.npv = 'normal'
+        sc.tid = 0
+        this.$router.push('/task/result')
       }
     }
   }

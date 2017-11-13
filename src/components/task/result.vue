@@ -133,7 +133,7 @@
           },
           {
             label: 'We changed a new PM.',
-            value: 'new'
+            value: 'newpm'
           },
           {
             label: 'I don\'t know why.',
