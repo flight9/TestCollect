@@ -37,3 +37,17 @@ Quasar.start(() => {
     render: h => h(require('./App').default)
   })
 })
+
+Vue.prototype.NPVLabel = function (npv, short = true) {
+  var label = 'N/A'
+  if (npv === 1) {
+    label = short ? 'N' : 'Normal'
+  }
+  else if (npv === 2) {
+    label = short ? 'P' : 'Peak'
+  }
+  else if (npv === 4) {
+    label = short ? 'V' : 'Valley'
+  }
+  return label
+}

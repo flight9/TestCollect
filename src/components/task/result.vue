@@ -2,13 +2,13 @@
   <!-- if you want automatic padding use "layout-padding" class -->
   <div class="layout-padding" ref="page">
     <h6 class="text-center">A-101,HM,Electricity - DEC,2017</h6>
-    <h6 class="text-center">Tid: {{tid ? tid : '(empty)'}}</h6>
+    <h6 class="text-center">Tid: {{id ? id : '(empty)'}}</h6>
 
     <div id="main-div" class="bg-lime-3 round-borders">
     <table class="q-table">
       <thead>
       <tr>
-        <th class="text-left capitalize" width="90%">{{npv}}</th>
+        <th class="text-left capitalize" width="90%">{{NPVLabel(npv,false)}}</th>
         <th class="text-center">
           <pmscan-anyline @success="onPmscan" small></pmscan-anyline>
         </th>
@@ -16,7 +16,7 @@
       </thead>
       <tbody>
       <tr>
-        <td class="text-left">No. {{barcode ? barcode: '(empty)'}}</td>
+        <td class="text-left">No. {{pm_no ? pm_no: '(empty)'}}</td>
         <td class="text-center">
           <qrscan-anyline @success="onQrscan" small></qrscan-anyline>
         </td>
@@ -27,7 +27,6 @@
         </td>
         <td class="text-center">
           <photo-cordova @success="onPhoto" small></photo-cordova>
-          <br/>
           <!--test:-->
           <!--wx:<photo-wechat @success="onPhotoWx" small></photo-wechat>-->
           <!--wx:<qrscan-wechat @success="onQrscanWx" small></qrscan-wechat>-->
@@ -70,7 +69,7 @@
     </table>
     </div>
 
-    <q-btn color="primary" class="full-width fixed-bottom" @click="complete" big v-show="footer_show">
+    <q-btn color="primary" class="full-width fixed-bottom" @click="onSave" big v-show="footer_show">
       Complete
     </q-btn>
   </div>
@@ -88,6 +87,7 @@
   } from 'quasar'
   import global_ from 'src/components/global'
   import transfer from 'src/api/tri_transfer'
+  import { mapActions } from 'vuex'
   import PhotoCordova from 'src/components/tri_component/photo_cordova.vue'
   import QrscanAnyline from 'src/components/tri_component/qrscan_anyline.vue'
   import PmscanAnyline from 'src/components/tri_component/pmscan_anyline.vue'
@@ -111,10 +111,10 @@
       return {
         final_reading: 0,
         input_reading: 0,
-        barcode: '',
+        pm_no: '',
         photo_src: '',
-        tid: 0,
-        npv: '',
+        id: 0,
+        npv: 1,
         reading_editing: false,
         footer_show: true,
         button_icon: 'edit',
@@ -149,15 +149,15 @@
     computed: {},
     created: function () {
       let sc = global_.scanResult
-      if (sc.tid === 0) {
+      if (sc.id === 0) {
         this.input_reading = this.final_reading = sc.reading
-        this.barcode = sc.barcode
+        this.pm_no = sc.pm_no
         this.photo_src = sc.photo_src
         this.npv = sc.npv
-        // Todo: search for barcode to get tid
+        // Todo: search for barcode to get id
       }
       else {
-        this.tid = sc.tid
+        this.id = sc.id
         // Todo: read existing result
       }
     },
@@ -199,7 +199,7 @@
       },
       complete () {
         let params = {
-          tid: 1234,
+          id: 1234,
           commit: 'ok',
           reading: this.final_reading
         }
@@ -209,10 +209,20 @@
           alert(error.source)
         })
       },
+      onSave () {
+        this.addResult({
+          pm_no: this.pm_no,
+          npv: this.npv,
+          photo_src: this.photo_src,
+          reading: this.final_reading,
+          comment: this.comment
+        })
+        this.$router.push('/task/list')
+      },
       onPmscan (result) {
         this.final_reading = this.input_reading = result.reading
         this.photo_src = result.imagePath
-        this.barcode = result.barcode
+        this.pm_no = result.barcode
       },
       onPhoto (result) {
         this.photo_src = result.imageURI
@@ -228,7 +238,8 @@
       },
       onQrscanWx (result) {
         alert(result.value)
-      }
+      },
+      ...mapActions(['addResult'])
     }
   }
 </script>

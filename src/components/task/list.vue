@@ -31,14 +31,14 @@
     <!--show photo upload form-->
 
     <q-data-table
-            :data="table"
+            :data="allResults"
             :config="tableConfig"
             :columns="tableColumns"
             @refresh="refresh"
             @rowclick="rowClick"
     >
       <template slot="col-npv" slot-scope="cell">
-        {{getNPVLabel(cell.data)}}
+        {{NPVLabel(cell.data)}}
       </template>
       <template slot='col-comment' slot-scope='cell'>
         {{cell.data ? 'C' : ''}}
@@ -47,10 +47,10 @@
     <q-modal ref="detailModal" :content-css="{padding: '30px', minWidth: '50vw'}">
       <h5>Detail Result</h5>
       <div class="group">
-        <p>No. {{pm_no}} ({{npv}})</p>
+        <p>No. {{pm_no}} ({{NPVLabel(npv, false)}})</p>
         <img :src="photo_src" class="responsive"/>
         <p>Reading: {{reading}}</p>
-        <p>Comment: {{reading}}</p>
+        <p>Comment: </p>
       </div>
       <q-btn color="primary" @click="$refs.detailModal.close()">Close</q-btn>
     </q-modal>
@@ -130,6 +130,7 @@
   import PmscanAnyline from 'src/components/tri_component/pmscan_anyline.vue'
   import QrscanAnyline from 'src/components/tri_component/qrscan_anyline.vue'
   import global_ from 'src/components/global'
+  import { mapGetters } from 'vuex'
   export default {
     components: {
       QLayout,
@@ -163,7 +164,10 @@
       },
       inWechat () {
         return /micromessenger/.test(navigator.userAgent.toLowerCase())
-      }
+      },
+      ...mapGetters([
+        'allResults'
+      ])
     },
     methods: {
       next: function () {
@@ -179,35 +183,21 @@
       },
       rowClick (row) {
         this.pm_no = row.pm_no
-        this.npv = this.getNPVLabel(row.npv, false)
+        this.npv = row.npv
         this.photo_src = require('../img/no_reading.jpg')
         this.reading = row.reading
         this.$refs.detailModal.open()
-      },
-      getNPVLabel (npv, short = true) {
-        var label = 'N/A'
-        if (npv === 1) {
-          label = short ? 'N' : 'Normal'
-        }
-        else if (npv === 2) {
-          label = short ? 'P' : 'Peak'
-        }
-        else if (npv === 4) {
-          label = short ? 'V' : 'Valley'
-        }
-        return label
       },
       onPmscan (result) {
         // Reading
         let sc = global_.scanResult
         sc.reading = result.reading
-        sc.barcode = result.barcode
-        sc.npv = 'normal'
+        sc.pm_no = result.barcode
+        sc.npv = 1
         sc.photo_src = result.imagePath
-        sc.tid = 0
 
         // Empty?
-        if (!sc.barcode) {
+        if (!sc.pm_no) {
           alert('Error: no barcode!')
         }
         if (!sc.reading) {
@@ -224,12 +214,12 @@
             form: {
               option: {
                 type: 'radio',
-                model: 'normal',
+                model: 1,
                 inline: true, // optional
                 items: [
-                  {label: 'Normal', value: 'normal'},
-                  {label: 'Peak', value: 'peak'},
-                  {label: 'Valley', value: 'valley'}
+                  {label: 'Normal', value: 1},
+                  {label: 'Peak', value: 2},
+                  {label: 'Valley', value: 4}
                 ]
               }
             },
@@ -256,9 +246,8 @@
         // Reading
         let sc = global_.scanResult
         sc.photo_src = result.imagePath
-        sc.barcode = result.value
-        sc.npv = 'normal'
-        sc.tid = 0
+        sc.pm_no = result.value
+        sc.npv = 1
         this.$router.push('/task/result')
       }
     }
@@ -358,60 +347,6 @@
       pm_no: 'PM-40183523',
       npv: 1,
       reading: '12369.6',
-      comment: ''
-    },
-    {
-      pm_no: 'PM-40183525',
-      npv: 1,
-      reading: '60337.5',
-      comment: 'newpm'
-    },
-    {
-      pm_no: 'PM-40183535',
-      npv: 4,
-      reading: '48768.1',
-      comment: 'unknown'
-    },
-    {
-      pm_no: 'PM-40183536',
-      npv: 1,
-      reading: '57578.5',
-      comment: ''
-    },
-    {
-      pm_no: 'PM-40183537',
-      npv: 1,
-      reading: '32372.4',
-      comment: 'newpm'
-    },
-    {
-      pm_no: 'PM-40183536',
-      npv: 1,
-      reading: '57578.5',
-      comment: ''
-    },
-    {
-      pm_no: 'PM-40183536',
-      npv: 1,
-      reading: '57578.5',
-      comment: ''
-    },
-    {
-      pm_no: 'PM-40183536',
-      npv: 1,
-      reading: '57578.5',
-      comment: ''
-    },
-    {
-      pm_no: 'PM-40183536',
-      npv: 1,
-      reading: '57578.5',
-      comment: ''
-    },
-    {
-      pm_no: 'PM-40183536',
-      npv: 1,
-      reading: '57578.5',
       comment: ''
     }
   ]
