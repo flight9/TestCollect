@@ -184,13 +184,15 @@
       rowClick (row) {
         this.pm_no = row.pm_no
         this.npv = row.npv
-        this.photo_src = require('../img/no_reading.jpg')
+        this.photo_src = row.photo_src
         this.reading = row.reading
+        this.comment = 'TODO'
         this.$refs.detailModal.open()
       },
       onPmscan (result) {
         // Reading
         let sc = global_.scanResult
+        sc.reset()
         sc.reading = result.reading
         sc.pm_no = result.barcode
         sc.npv = 1
@@ -245,6 +247,7 @@
       onQrscan (result) {
         // Reading
         let sc = global_.scanResult
+        sc.reset()
         sc.photo_src = result.imagePath
         sc.pm_no = result.value
         sc.npv = 1
@@ -271,7 +274,7 @@
     // },
     // selection: 'multiple', // or 'single'
     messages: {
-      noData: '<i>warning</i> No data available.',
+      noData: '<No data available.>',
       noDataAfterFiltering: '<i>warning</i> No results. Please refine your search terms.'
     },
     labels: {
