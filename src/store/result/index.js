@@ -4,12 +4,14 @@ import getters from './getters.js'
 import { stoResults } from 'src/api/storage'
 
 const state = stoResults.get() || {
-  posts: [
+  results: [
     // {
-    //   userId: 1,
     //   id: 1,
-    //   title: 'Sample 1',
-    //   body: 'Content 1'
+    //   pm_no: '',
+    //   npv: '',
+    //   photo_src: '',
+    //   reading: 0,
+    //   comment: ''
     // }
   ],
   newid: 0

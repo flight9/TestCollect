@@ -1,9 +1,5 @@
-export const ADDPOST = 'ADDPOST'
+export const ADDRESULT = 'ADDRESULT'
 
-export const EDITPOST = 'EDITPOST'
+export const DELRESULTS = 'DELRESULTS'
 
-export const DELPOSTS = 'DELPOSTS'
-
-export const CLEARPOSTS = 'CLEARPOSTS'
-
-export const DOWNPOSTS = 'DOWNPOSTS'
+export const CLEARRESULTS = 'CLEARRESULTS'
