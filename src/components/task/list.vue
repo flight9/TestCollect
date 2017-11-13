@@ -1,6 +1,6 @@
 <template>
   <!-- if you want automatic padding use "layout-padding" class -->
-  <div class="layout-padding">
+  <div class="layout-padding group">
     <h6 class="text-center">Power Meter Reading Collection - DEC,2017</h6>
     <h6 class="text-center">6 pending tasks</h6>
     <q-search
@@ -20,9 +20,9 @@
       </q-btn>
       <qrscan-anyline @success="onQrscan" icon="camera_alt"></qrscan-anyline>
     </div>
-    <q-btn color="primary" class="full-width fixed-bottom" @click="next" big>
-      Next
-    </q-btn>
+    <!--这个Next按钮显示下Table下面<q-btn color="primary" class="full-width fixed-bottom" @click="next" big>-->
+      <!--Next-->
+    <!--</q-btn>-->
     <!--if wechat-->
     <!--take photo button using wechat-->
     <!--if cordova-->
@@ -30,6 +30,30 @@
     <!--if web-->
     <!--show photo upload form-->
 
+    <q-data-table
+            :data="table"
+            :config="tableConfig"
+            :columns="tableColumns"
+            @refresh="refresh"
+            @rowclick="rowClick"
+    >
+      <template slot="col-npv" slot-scope="cell">
+        {{getNPVLabel(cell.data)}}
+      </template>
+      <template slot='col-comment' slot-scope='cell'>
+        {{cell.data ? 'C' : ''}}
+      </template>
+    </q-data-table>
+    <q-modal ref="detailModal" :content-css="{padding: '30px', minWidth: '50vw'}">
+      <h5>Detail Result</h5>
+      <div class="group">
+        <p>No. {{pm_no}} ({{npv}})</p>
+        <img :src="photo_src" class="responsive"/>
+        <p>Reading: {{reading}}</p>
+        <p>Comment: {{reading}}</p>
+      </div>
+      <q-btn color="primary" @click="$refs.detailModal.close()">Close</q-btn>
+    </q-modal>
   </div>
 
 
@@ -99,7 +123,9 @@
     QBtn,
     QIcon,
     QSearch,
-    Dialog
+    Dialog,
+    QDataTable,
+    QModal
   } from 'quasar'
   import PmscanAnyline from 'src/components/tri_component/pmscan_anyline.vue'
   import QrscanAnyline from 'src/components/tri_component/qrscan_anyline.vue'
@@ -113,12 +139,22 @@
       QIcon,
       QSearch,
       Dialog,
+      QDataTable,
+      QModal,
       PmscanAnyline,
       QrscanAnyline
     },
     data () {
       return {
-        search_text: null
+        search_text: null,
+        tableConfig,
+        tableColumns,
+        table,
+        pm_no: '',
+        npv: '',
+        photo_src: '',
+        reading: 0,
+        comment: ''
       }
     },
     computed: {
@@ -135,6 +171,31 @@
       },
       onSearch: function () {
         alert('onSearch')
+      },
+      refresh (done) {
+        this.timeout = setTimeout(() => {
+          done()
+        }, 2000)
+      },
+      rowClick (row) {
+        this.pm_no = row.pm_no
+        this.npv = this.getNPVLabel(row.npv, false)
+        this.photo_src = require('../img/no_reading.jpg')
+        this.reading = row.reading
+        this.$refs.detailModal.open()
+      },
+      getNPVLabel (npv, short = true) {
+        var label = 'N/A'
+        if (npv === 1) {
+          label = short ? 'N' : 'Normal'
+        }
+        else if (npv === 2) {
+          label = short ? 'P' : 'Peak'
+        }
+        else if (npv === 4) {
+          label = short ? 'V' : 'Valley'
+        }
+        return label
       },
       onPmscan (result) {
         // Reading
@@ -202,6 +263,158 @@
       }
     }
   }
+
+  var tableConfig = {
+    rowHeight: '50px',
+    title: false,
+    noHeader: false,
+    refresh: false,
+    columnPicker: false,
+    leftStickyColumns: 0,
+    // "minHeight", "maxHeight" or "height" are important(Me: not including header/footer)
+    bodyStyle: {
+      height: '350px' // if empty, the height is auto
+    },
+    responsive: false,
+    // pagination: {
+    //   rowsPerPage: 10,
+    //   options: [10]
+    // },
+    // selection: 'multiple', // or 'single'
+    messages: {
+      noData: '<i>warning</i> No data available to show.',
+      noDataAfterFiltering: '<i>warning</i> No results. Please refine your search terms.'
+    },
+    labels: {
+      columns: '列',
+      allCols: '所有列',
+      rows: '行',
+      selected: {
+        singular: '选中一项.',
+        plural: '选中多项.'
+      },
+      clear: '清空',
+      search: '查找',
+      all: '所有'
+    }
+  }
+
+  var tableColumns = [
+    {
+      label: 'PM No',
+      field: 'pm_no',
+      width: '60px',
+      filter: false,
+      sort: true,
+      type: 'string'
+    },
+    {
+      label: 'NPV',
+      field: 'npv',
+      width: '20px',
+      filter: false,
+      sort: false,
+      type: 'number'
+    },
+    {
+      label: 'Reading',
+      field: 'reading',
+      width: '40px',
+      filter: false,
+      sort: false,
+      type: 'number'
+    },
+    {
+      // 应该只显示 有/无 状态
+      label: 'Comment',
+      field: 'comment',
+      width: '20px',
+      filter: false,
+      sort: false,
+      type: 'string'
+    }
+  ]
+
+  var table = [
+    {
+      pm_no: 'PM-40183513',
+      npv: 1,
+      reading: '12345678.01',
+      comment: ''
+    },
+    {
+      pm_no: 'PM-40183521',
+      npv: 2,
+      reading: '37123.3',
+      comment: ''
+    },
+    {
+      pm_no: 'PM-40183522',
+      npv: 4,
+      reading: '22466.9',
+      comment: 'broken'
+    },
+    {
+      pm_no: 'PM-40183523',
+      npv: 1,
+      reading: '12369.6',
+      comment: ''
+    },
+    {
+      pm_no: 'PM-40183525',
+      npv: 1,
+      reading: '60337.5',
+      comment: 'newpm'
+    },
+    {
+      pm_no: 'PM-40183535',
+      npv: 4,
+      reading: '48768.1',
+      comment: 'unknown'
+    },
+    {
+      pm_no: 'PM-40183536',
+      npv: 1,
+      reading: '57578.5',
+      comment: ''
+    },
+    {
+      pm_no: 'PM-40183537',
+      npv: 1,
+      reading: '32372.4',
+      comment: 'newpm'
+    },
+    {
+      pm_no: 'PM-40183536',
+      npv: 1,
+      reading: '57578.5',
+      comment: ''
+    },
+    {
+      pm_no: 'PM-40183536',
+      npv: 1,
+      reading: '57578.5',
+      comment: ''
+    },
+    {
+      pm_no: 'PM-40183536',
+      npv: 1,
+      reading: '57578.5',
+      comment: ''
+    },
+    {
+      pm_no: 'PM-40183536',
+      npv: 1,
+      reading: '57578.5',
+      comment: ''
+    },
+    {
+      pm_no: 'PM-40183536',
+      npv: 1,
+      reading: '57578.5',
+      comment: ''
+    }
+  ]
 </script>
 
 <style>
