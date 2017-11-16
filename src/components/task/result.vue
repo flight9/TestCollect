@@ -93,7 +93,7 @@
   import PmscanAnyline from 'src/components/tri_component/pmscan_anyline.vue'
 //  import PhotoWechat from 'src/components/tri_component/photo_wechat.vue'
 //  import QrscanWechat from 'src/components/tri_component/qrscan_wechat.vue'
-  const { getScrollTarget, setScrollPosition } = scroll
+  const { getScrollTarget, getScrollPosition, setScrollPosition } = scroll
   export default {
     components: {
       QBtn,
@@ -177,7 +177,7 @@
           }
           else {
             Alert.create({
-              html: 'Error: the input is out of range!',
+              html: 'Error: the format of input is wrong!',
               color: 'error'
             })
             this.input_reading = this.final_reading
@@ -185,7 +185,7 @@
         }
       },
       check (data) {
-        if (data > 10) {
+        if (/^(\d+)(\.\d+)?$/.test(data)) {
           return true
         }
         else {
@@ -194,8 +194,11 @@
       },
       scrollBottom () {
         // codes here is for bug: keyboard will cover the input element
-        let page = getScrollTarget(this.$refs.reading_input.$el)
-        setScrollPosition(page, 1000, 500) // 1000 is a number big enough
+        if (this.reading_editing) {
+          let page = getScrollTarget(this.$refs.reading_input.$el)
+          let pos = getScrollPosition(page)
+          setScrollPosition(page, pos + 275, 500) // second(distance) is a number big enough, third is delay
+        }
       },
       complete () {
         let params = {
