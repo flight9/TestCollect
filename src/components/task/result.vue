@@ -34,34 +34,38 @@
       </tr>
       <tr>
         <td>
-          <q-input ref="reading_input" v-model.trim="input_reading" stack-label="Reading" error
-                   type="number" :readonly="!reading_editing" align="right" @click="scrollBottom"
+          <q-input ref="reading_input" v-model.trim="reading" stack-label="Reading" error
+                   type="number" :readonly="!readingEditing" align="right" @click="scrollBottom"
           />
         </td>
         <td class="text-center">
-          <q-btn @click="toggleReadingEdit" small>
+          <q-btn @click="toggleEditing" small>
             <q-icon :name="button_icon" />
           </q-btn>
         </td>
       </tr>
       <tr>
         <td colspan="2">
-          <q-alert color="green" icon="help"v-model="needConfirm" :actions="[
-            {label:'Yes, it does', handler:() => {}},
-            {label:'No, I\'ll revise it.', handler:() => {}},
+          <q-alert color="green" icon="help" v-show="questionMatch" :actions="[
+            {label:'Yes, it does', handler:() => { showFinish = true }},
+            {label:'No, I\'ll revise it.', handler:() => { toggleEditing() }},
           ]">
             Does the reading match the photo?
           </q-alert>
-          <q-alert color="amber" icon="warning" v-model="hasWarning">
-            The reading is less than that of last month. Why? Pls comment below.
+          <q-alert color="amber" icon="warning" v-show="hasWarning">
+            {{warningPrompt}}
           </q-alert>
-          <q-alert color="error" icon="warning" v-model="hasWarning">
-            The meter NO. is empty. Please scan the barcode.
+          <q-alert color="error" icon="warning" v-show="hasError">
+            {{errPrompt}}
+          </q-alert>
+          <q-alert color="secondary" icon="edit" v-show="hasTest">
+            You are editing.
           </q-alert>
           <q-select
             v-model="comment"
             stack-label="Comment:"
             :options="commentOptions"
+            @change="commentChanged"
           />
         </td>
       </tr>
@@ -69,7 +73,7 @@
     </table>
     </div>
 
-    <q-btn color="primary" class="full-width fixed-bottom" @click="onSave" big v-show="footer_show">
+    <q-btn color="primary" class="full-width fixed-bottom" @click="onSave" big v-show="showFinish">
       Complete
     </q-btn>
   </div>
@@ -81,7 +85,6 @@
     QIcon,
     QInput,
     scroll,
-    Alert,
     QSelect,
     QAlert
   } from 'quasar'
@@ -109,19 +112,24 @@
     },
     data () {
       return {
-        final_reading: 0,
-        input_reading: 0,
+        // data variables
+        reading: 0,
         pm_no: '',
         photo_src: '',
         id: 0,
         npv: 1,
-        reading_editing: false,
-        footer_show: true,
-        button_icon: 'edit',
-        needConfirm: true,
-        hasWarning: true,
-        hasError: true,
         comment: '',
+        // status variables
+        readingEditing: false,
+        button_icon: 'edit',
+        showFinish: false,
+        questionMatch: false,
+        hasWarning: false,
+        hasError: false,
+        warningPrompt: '',
+        errPrompt: '',
+        hasTest: false,
+        // extra data
         commentOptions: [
           {
             label: '(No comment)',
@@ -148,9 +156,10 @@
     },
     computed: {},
     created: function () {
+      // update result
       let sc = global_.scanResult
       if (sc.id === 0) {
-        this.input_reading = this.final_reading = sc.reading
+        this.reading = sc.reading
         this.pm_no = sc.pm_no
         this.photo_src = sc.photo_src
         this.npv = sc.npv
@@ -160,31 +169,60 @@
         this.id = sc.id
         // Todo: read existing result
       }
+      // update status
+      this.questionMatch = this.checkResult()
+    },
+    mounted: function () {
     },
     methods: {
-      toggleReadingEdit: function () {
-        this.reading_editing = !this.reading_editing
-        if (this.reading_editing) {
+      checkResult () {
+        this.hasError = this._hasError()
+        if (this.hasError) {
+          this.hasWarning = false
+          this.questionMatch = false
+          return false
+        }
+        this.hasWarning = this._hasWarning()
+        if (this.hasWarning) {
+          this.hasError = false
+          this.questionMatch = false
+          // this.$refs.comment.enable = true
+          return false
+        }
+        return true
+      },
+      _hasError () {
+        if (!this.pm_no) {
+          this.errorPrompt = 'The meter NO. is empty. Please scan the barcode.'
+          return true
+        }
+        if (!this.validateNumber(this.reading)) {
+          this.errPrompt = 'The reading should not be empty, negative or with symbol.'
+          return true
+        }
+        return false
+      },
+      _hasWarning () {
+        if (this.reading === 0 && !this.comment) {
+          this.warningPrompt = 'The reading is 0. Why? Pls comment below.'
+          return true
+        }
+        return false
+      },
+      toggleEditing: function () {
+        this.hasTest = !this.hasTest
+        this.readingEditing = !this.readingEditing
+        if (this.readingEditing) {
           this.$refs.reading_input.select()
-          this.footer_show = false
+          this.showFinish = false
           this.button_icon = 'check_circle'
         }
         else {
-          this.footer_show = true
+          this.showFinish = this.checkResult()
           this.button_icon = 'edit'
-          if (this.check(this.input_reading)) {
-            this.final_reading = this.input_reading
-          }
-          else {
-            Alert.create({
-              html: 'Error: the format of input is wrong!',
-              color: 'error'
-            })
-            this.input_reading = this.final_reading
-          }
         }
       },
-      check (data) {
+      validateNumber (data) {
         if (/^(\d+)(\.\d+)?$/.test(data)) {
           return true
         }
@@ -194,17 +232,20 @@
       },
       scrollBottom () {
         // codes here is for bug: keyboard will cover the input element
-        if (this.reading_editing) {
+        if (this.readingEditing) {
           let page = getScrollTarget(this.$refs.reading_input.$el)
           let pos = getScrollPosition(page)
           setScrollPosition(page, pos + 275, 500) // second(distance) is a number big enough, third is delay
         }
       },
+      commentChanged (newValue) {
+        this.showFinish = this.checkResult()
+      },
       complete () {
         let params = {
           id: 1234,
           commit: 'ok',
-          reading: this.final_reading
+          reading: this.reading
         }
         transfer.uploadImage(this.photo_src, 'photo', params).then((result) => {
           alert(result.response)
@@ -212,20 +253,11 @@
           alert(error.source)
         })
       },
-      onSave () {
-        this.addResult({
-          pm_no: this.pm_no,
-          npv: this.npv,
-          photo_src: this.photo_src,
-          reading: this.final_reading,
-          comment: this.comment
-        })
-        this.$router.go(-1)
-      },
       onPmscan (result) {
-        this.final_reading = this.input_reading = result.reading
+        this.reading = result.reading
         this.photo_src = result.imagePath
         this.pm_no = result.barcode
+        this.showFinish = this.checkResult()
       },
       onPhoto (result) {
         this.photo_src = result.imageURI
@@ -234,6 +266,7 @@
       onQrscan (result) {
         this.photo_src = result.imagePath
         alert(result.value)
+        this.showFinish = this.checkResult()
       },
       onPhotoWx (result) {
         this.photo_src = result.localId
@@ -241,6 +274,16 @@
       },
       onQrscanWx (result) {
         alert(result.value)
+      },
+      onSave () {
+        this.addResult({
+          pm_no: this.pm_no,
+          npv: this.npv,
+          photo_src: this.photo_src,
+          reading: this.reading,
+          comment: this.comment
+        })
+        this.$router.go(-1)
       },
       ...mapActions(['addResult'])
     }

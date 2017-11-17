@@ -1,7 +1,7 @@
 <script>
   const scanResult = {
     id: 0,
-    pm_no: '',
+    pm_no: '999999',
     npv: 1,
     photo_src: require('./img/no_reading.jpg'),
     reading: 9999.99,
@@ -11,7 +11,7 @@
       this.pm_no = ''
       this.npv = 1
       this.photo_src = require('./img/no_reading.jpg')
-      this.reading = 9999.99
+      this.reading = -1
       this.comment = ''
     }
   }
