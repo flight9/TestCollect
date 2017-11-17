@@ -23,7 +23,9 @@
       </tr>
       <tr>
         <td class="text-center">
-          <img :src="photo_src" class="responsive"/>
+          <a @click="clickImage">
+            <img :src="photo_src" class="responsive"/>
+          </a>
         </td>
         <td class="text-center">
           <photo-cordova @success="onPhoto" small></photo-cordova>
@@ -230,6 +232,9 @@
           return false
         }
       },
+      clickImage () {
+        window.open(this.photo_src, '_blank', 'location=no,enableViewportScale=true')
+      },
       scrollBottom () {
         // codes here is for bug: keyboard will cover the input element
         if (this.readingEditing) {
@@ -264,6 +269,7 @@
         alert(result.imageURI)
       },
       onQrscan (result) {
+        this.pm_no = result.value
         this.photo_src = result.imagePath
         alert(result.value)
         this.showFinish = this.checkResult()
