@@ -44,7 +44,7 @@
         </q-item>
         <q-item @click="clearResult()">
           <q-item-side icon="delete" />
-          <q-item-main label="Clear Result" sublabel="only for test" />
+          <q-item-main label="Clear Results" sublabel="only for test" />
         </q-item>
         <q-side-link item to="/others">
           <q-item-side icon="map" />
@@ -117,8 +117,10 @@
       },
       clearResult () {
         this.$refs.layout.hideCurrentSide(() => {
-          this.clearResults()
-          alert('Cleared!')
+          if (confirm('Are you sure to clear?')) {
+            this.clearResults()
+            alert('Cleared!')
+          }
         })
       },
       ...mapActions(['clearResults'])
