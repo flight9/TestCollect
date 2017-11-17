@@ -232,8 +232,11 @@
           return false
         }
       },
+      /* global PhotoViewer */
+      /* eslint no-undef: "error" */
       clickImage () {
-        window.open(this.photo_src, '_blank', 'location=no,enableViewportScale=true')
+        // window.open(this.photo_src, '_blank', 'location=no,enableViewportScale=true')
+        PhotoViewer.show(this.photo_src, 'Zoom')
       },
       scrollBottom () {
         // codes here is for bug: keyboard will cover the input element

@@ -25,6 +25,7 @@
     <preference name="keyboardDisplayRequiresUserAction" value="false" />
     <engine name="android" spec="^6.2.3" />
     <engine name="browser" spec="^4.1.0" />
+    <plugin name="com-sarriaroman-photoviewer" spec="^1.1.11" />
     <plugin name="cordova-plugin-camera" spec="^2.4.1" />
     <plugin name="cordova-plugin-crosswalk-webview" spec="^2.3.0" />
     <plugin name="cordova-plugin-file" spec="^4.0.0" />
