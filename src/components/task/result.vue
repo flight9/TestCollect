@@ -235,7 +235,6 @@
       /* global PhotoViewer */
       /* eslint no-undef: "error" */
       clickImage () {
-        // window.open(this.photo_src, '_blank', 'location=no,enableViewportScale=true')
         PhotoViewer.show(this.photo_src, 'Zoom')
       },
       scrollBottom () {
@@ -263,18 +262,25 @@
       },
       onPmscan (result) {
         this.reading = result.reading
-        this.photo_src = result.imagePath
+        global_.moveFilePersistent(result.imagePath)
+          .then((url) => {
+            this.photo_src = url
+          })
         this.pm_no = result.barcode
         this.showFinish = this.checkResult()
       },
       onPhoto (result) {
-        this.photo_src = result.imageURI
-        alert(result.imageURI)
+        global_.moveFilePersistent(result.imageURI)
+          .then((url) => {
+            this.photo_src = url
+          })
       },
       onQrscan (result) {
         this.pm_no = result.value
-        this.photo_src = result.imagePath
-        alert(result.value)
+        global_.moveFilePersistent(result.imagePath)
+          .then((url) => {
+            this.photo_src = url
+          })
         this.showFinish = this.checkResult()
       },
       onPhotoWx (result) {

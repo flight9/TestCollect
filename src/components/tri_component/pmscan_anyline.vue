@@ -33,6 +33,9 @@
     methods: {
       pmscan () {
         anyline.energy.scan('AUTO_ANALOG_DIGITAL_METER').then((result) => {
+          if (result.imagePath.startsWith('/')) {
+            result.imagePath = 'file://' + result.imagePath
+          }
           this.$emit('success', result)
         }).catch((error) => {
           this.$emit('fail', {message: error})

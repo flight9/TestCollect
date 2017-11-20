@@ -49,6 +49,7 @@
       <div class="group">
         <p>No. {{pm_no}} ({{NPVLabel(npv, false)}})</p>
         <img :src="photo_src" class="responsive"/>
+        <p>photo_src: {{photo_src}}</p>
         <p>Reading: {{reading}}</p>
         <p>Comment: </p>
       </div>
@@ -196,7 +197,10 @@
         sc.reading = result.reading
         sc.pm_no = result.barcode
         sc.npv = 1
-        sc.photo_src = result.imagePath
+        global_.moveFilePersistent(result.imagePath)
+          .then((url) => {
+            sc.photo_src = url // 转跳最好放在这之后，否则先转跳的话图拿不到
+          })
 
         // Empty?
         if (!sc.pm_no) {
@@ -248,10 +252,13 @@
         // Reading
         let sc = global_.scanResult
         sc.reset()
-        sc.photo_src = result.imagePath
         sc.pm_no = result.value
         sc.npv = 1
-        this.$router.push('/task/result')
+        global_.moveFilePersistent(result.imagePath)
+          .then((url) => {
+            sc.photo_src = url
+            this.$router.push('/task/result')
+          })
       }
     }
   }

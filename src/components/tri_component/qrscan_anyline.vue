@@ -37,6 +37,9 @@
     methods: {
       qrscan () {
         anyline.barcode.scan().then((result) => {
+          if (result.imagePath.startsWith('/')) {
+            result.imagePath = 'file://' + result.imagePath
+          }
           this.$emit('success', result)
         }).catch((error) => {
           this.$emit('fail', {message: error})
