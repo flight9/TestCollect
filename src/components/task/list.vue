@@ -28,19 +28,20 @@
     <!--show photo upload form-->
 
     <q-data-table
-            :data="allResults"
-            :config="tableConfig"
-            :columns="tableColumns"
-            @refresh="refresh"
-            @rowclick="rowClick"
+      :data="allResults"
+      :config="tableConfig"
+      :columns="tableColumns"
+      @refresh="refresh"
+      @rowclick="rowClick"
     >
       <template slot="col-npv" slot-scope="cell">
         {{NPVLabel(cell.data)}}
       </template>
-      <template slot='col-comment' slot-scope='cell'>
-        {{cell.data ? 'C' : ''}}
+      <template slot='col-timestamp' slot-scope='cell'>
+        {{formatDate(cell.data)}}
       </template>
     </q-data-table>
+
     <q-modal ref="detailModal" :content-css="{padding: '30px', minWidth: '50vw'}">
       <h5>Detail Result</h5>
       <div class="group">
@@ -49,6 +50,7 @@
         <p>photo_src: {{photo_src}}</p>
         <p>Reading: {{reading}}</p>
         <p>Comment: </p>
+        <p>Time: {{datetime}}</p>
       </div>
       <q-btn color="primary" @click="$refs.detailModal.close()">Close</q-btn>
     </q-modal>
@@ -123,7 +125,8 @@
     QSearch,
     Dialog,
     QDataTable,
-    QModal
+    QModal,
+    date
   } from 'quasar'
   import PmscanAnyline from 'src/components/tri_component/pmscan_anyline.vue'
   import QrscanAnyline from 'src/components/tri_component/qrscan_anyline.vue'
@@ -153,7 +156,8 @@
         npv: '',
         photo_src: '',
         reading: 0,
-        comment: ''
+        comment: '',
+        datetime: ''
       }
     },
     computed: {
@@ -190,6 +194,7 @@
         this.photo_src = row.photo_src
         this.reading = row.reading
         this.comment = 'TODO'
+        this.datetime = this.formatDateTime(row.timestamp)
         this.$refs.detailModal.open()
       },
       onPmscan (result) {
@@ -261,6 +266,22 @@
             sc.photo_src = url
             this.$router.push('/task/result')
           })
+      },
+      formatDate (timestamp) {
+        if (timestamp) {
+          return date.formatDate(timestamp, 'YYYY/MM/DD')
+        }
+        else {
+          return 'N/A'
+        }
+      },
+      formatDateTime (timestamp) {
+        if (timestamp) {
+          return date.formatDate(timestamp, 'YYYY/MM/DD HH:mm:ss')
+        }
+        else {
+          return 'N/A'
+        }
       }
     }
   }
@@ -283,8 +304,8 @@
     // },
     // selection: 'multiple', // or 'single'
     messages: {
-      noData: '<No data available.>',
-      noDataAfterFiltering: '<i>warning</i> No results. Please refine your search terms.'
+      noData: '[No data available.]',
+      noDataAfterFiltering: '[No results. Please refine your search terms.]'
     },
     labels: {
       columns: '列',
@@ -326,40 +347,22 @@
       type: 'number'
     },
     {
-      // 应该只显示 有/无 状态
-      label: 'Comment',
-      field: 'comment',
-      width: '20px',
+      label: 'Date',
+      field: 'timestamp',
+      width: '45px',
       filter: false,
       sort: false,
-      type: 'string'
+      type: 'date'
     }
   ]
 
   var table = [
-    {
+    { // Note: format may have changed
       pm_no: 'PM-40183513',
       npv: 1,
       reading: '12345678.01',
-      comment: ''
-    },
-    {
-      pm_no: 'PM-40183521',
-      npv: 2,
-      reading: '37123.3',
-      comment: ''
-    },
-    {
-      pm_no: 'PM-40183522',
-      npv: 4,
-      reading: '22466.9',
-      comment: 'broken'
-    },
-    {
-      pm_no: 'PM-40183523',
-      npv: 1,
-      reading: '12369.6',
-      comment: ''
+      comment: '',
+      timestamp: 0
     }
   ]
 </script>
