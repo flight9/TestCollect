@@ -49,7 +49,7 @@
         <img :src="photo_src" class="responsive"/>
         <p>photo_src: {{photo_src}}</p>
         <p>Reading: {{reading}}</p>
-        <p>Comment: </p>
+        <p>Comment: {{comment}}</p>
         <p>Time: {{datetime}}</p>
       </div>
       <q-btn color="primary" @click="$refs.detailModal.close()">Close</q-btn>
@@ -193,7 +193,7 @@
         this.npv = row.npv
         this.photo_src = row.photo_src
         this.reading = row.reading
-        this.comment = 'TODO'
+        this.comment = row.comment
         this.datetime = this.formatDateTime(row.timestamp)
         this.$refs.detailModal.open()
       },
