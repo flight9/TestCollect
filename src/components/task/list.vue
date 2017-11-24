@@ -15,9 +15,6 @@
     />
     <div class="row justify-center">
       <pmscan-anyline @success="onPmscan"></pmscan-anyline>
-      <q-btn @click="scanFake">
-        Continue
-      </q-btn>
       <qrscan-anyline @success="onQrscan" icon="camera_alt"></qrscan-anyline>
     </div>
     <!--这个Next按钮显示下Table下面<q-btn color="primary" class="full-width fixed-bottom" @click="next" big>-->
@@ -175,7 +172,12 @@
         alert('next')
       },
       onSearch: function () {
-        alert('onSearch')
+        if (this.search_text === '1111') {
+          this.scanFake()
+        }
+        else {
+          alert('onSearch')
+        }
       },
       refresh (done) {
         this.timeout = setTimeout(() => {
@@ -208,41 +210,41 @@
         }
         if (!sc.reading) {
           alert('Error: no reading!')
-        }
 
-        // Check the meter whether it has MPV?
-        let hasNPV = true
-        if (hasNPV) {
-          // prompt to select npv
-          Dialog.create({
-            title: 'Selection',
-            message: 'You shoule select the npv of this scan result.',
-            form: {
-              option: {
-                type: 'radio',
-                model: 1,
-                inline: true, // optional
-                items: [
-                  {label: 'Normal', value: 1},
-                  {label: 'Peak', value: 2},
-                  {label: 'Valley', value: 4}
-                ]
-              }
-            },
-            buttons: [
-              'Cancel',
-              {
-                label: 'Ok',
-                handler: (data) => {
-                  sc.npv = data.option
-                  this.$router.push('/task/result')
+          // Check the meter whether it has MPV?
+          let hasNPV = true
+          if (hasNPV) {
+            // prompt to select npv
+            Dialog.create({
+              title: 'Selection',
+              message: 'You shoule select the npv of this scan result.',
+              form: {
+                option: {
+                  type: 'radio',
+                  model: 1,
+                  inline: true, // optional
+                  items: [
+                    {label: 'Normal', value: 1},
+                    {label: 'Peak', value: 2},
+                    {label: 'Valley', value: 4}
+                  ]
                 }
-              }
-            ]
-          })
-        }
-        else {
-          this.$router.push('/task/result')
+              },
+              buttons: [
+                'Cancel',
+                {
+                  label: 'Ok',
+                  handler: (data) => {
+                    sc.npv = data.option
+                    this.$router.push('/task/result')
+                  }
+                }
+              ]
+            })
+          }
+          else {
+            this.$router.push('/task/result')
+          }
         }
       },
       scanFake () {

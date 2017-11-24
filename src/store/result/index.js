@@ -11,7 +11,8 @@ const state = stoResults.get() || {
     //   npv: 1,
     //   photo_src: '',
     //   reading: 0,
-    //   comment: ''
+    //   comment: '',
+    //   timestamp: 0
     // }
   ],
   newid: 0

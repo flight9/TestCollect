@@ -277,10 +277,6 @@
       },
       onQrscan (result) {
         this.pm_no = result.value
-        global_.moveFilePersistent(result.imagePath)
-          .then((url) => {
-            this.photo_src = url
-          })
         this.showFinish = this.checkResult()
       },
       onPhotoWx (result) {
@@ -296,7 +292,8 @@
           npv: this.npv,
           photo_src: this.photo_src,
           reading: this.reading,
-          comment: this.comment
+          comment: this.comment,
+          timestamp: (new Date()).valueOf()
         })
         this.$router.go(-1)
       },
