@@ -8,7 +8,9 @@
   "scripts": {
     "clean": "node build/script.clean.js",
     "dev": "node build/script.dev.js",
+    "devwechat": "node build/script.devwechat.js",
     "build": "node build/script.build.js",
+    "buildwechat": "node build/script.buildwechat.js",
     "lint": "eslint --ext .js,.vue src"
   },
   "dependencies": {

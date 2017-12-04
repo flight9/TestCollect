@@ -5,6 +5,9 @@
 import wx from 'weixin-js-sdk'
 import axios from 'axios'
 const wechat = {
+  test () {
+    console.log('wechat.test')
+  },
   jsconfig () {
     var data = {
       url: window.location.href.split('#')[0]
@@ -12,7 +15,6 @@ const wechat = {
     axios.post('/api/jsconfig', // api on our server when prod or a proxy server when dev
       data).then((response) => {
       var cfg = response.data
-      // console.log(cfg)
       wx.config({
         debug: true, // true 开启调试模式。
         appId: cfg.appId,
@@ -35,4 +37,5 @@ const wechat = {
   }
 }
 
+// ONLY for ES6:
 export default wechat
