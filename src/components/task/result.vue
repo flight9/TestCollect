@@ -28,7 +28,7 @@
           </a>
         </td>
         <td class="text-center">
-          <tri-photo @success="onPhotoWx" small></tri-photo>
+          <tri-photo></tri-photo>
         </td>
       </tr>
       <tr>
@@ -281,7 +281,7 @@
       },
       onPhotoWx (result) {
         // this.photo_src = result.localId
-        console.info(result)
+        console.log(result)
       },
       onQrscanWx (result) {
         alert(result.value)

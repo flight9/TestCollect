@@ -31,26 +31,29 @@
     },
     computed: {
       photoComponent () {
-        var photoCompenentChoice = 'PhotoWeb'
+        var photoCompenentChoice
         switch (__PLATFORM) {
           case 'wechat':
             photoCompenentChoice = 'PhotoWechat'
             break
+          default:
+            photoCompenentChoice = 'PhotoWeb'
         }
         return photoCompenentChoice
       }
     }
   }
 
-  triPhoto.components = {
-    PhotoWeb // eslint-disable-line no-undef
-  }
   switch (__PLATFORM) {
     case 'wechat':
       triPhoto.components = {
         PhotoWechat
       }
       break
+    default:
+      triPhoto.components = {
+        PhotoWeb // eslint-disable-line no-undef
+      }
   }
 
   export default triPhoto

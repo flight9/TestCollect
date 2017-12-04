@@ -1,5 +1,8 @@
 <template>
-  <input type="file" @change="processFile($event)">
+  <div>
+    <input type="file" @change="processFile($event)" ref="selectedFile" style="display: none;"/>
+    <input type="button" value="Browse..." @click="$refs.selectedFile.click();" />
+  </div>
 </template>
 
 <script>
