@@ -11,6 +11,7 @@
   } from 'quasar'
   import wx from 'weixin-js-sdk'
   export default {
+    name: 'photoWechat',
     components: {
       QBtn,
       QIcon
