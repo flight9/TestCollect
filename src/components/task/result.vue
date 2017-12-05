@@ -18,7 +18,8 @@
       <tr>
         <td class="text-left">No. {{pm_no ? pm_no: '(empty)'}}</td>
         <td class="text-center">
-          <qrscan-anyline @success="onQrscan" small></qrscan-anyline>
+          <!--<qrscan-anyline @success="onQrscan" small></qrscan-anyline>-->
+          <tri-qrscan small></tri-qrscan>
         </td>
       </tr>
       <tr>
@@ -91,10 +92,11 @@
   import transfer from 'src/api/tri_transfer'
   import { mapActions } from 'vuex'
   import PhotoCordova from 'src/components/tri_component/photo_cordova.vue'
-  import QrscanAnyline from 'src/components/tri_component/qrscan_anyline.vue'
+//  import QrscanAnyline from 'src/components/tri_component/qrscan_anyline.vue'
   import PmscanAnyline from 'src/components/tri_component/pmscan_anyline.vue'
 //  import PhotoWeb from 'src/components/tri_component/photo_web.vue'
   import TriPhoto from 'src/components/tri_component/tri_photo.vue'
+  import TriQrscan from 'src/components/tri_component/tri_qrscan.vue'
 //  import PhotoWechat from 'src/components/tri_component/photo_wechat.vue'
 //  import QrscanWechat from 'src/components/tri_component/qrscan_wechat.vue'
   const { getScrollTarget, getScrollPosition, setScrollPosition } = scroll
@@ -106,9 +108,9 @@
       QSelect,
       QAlert,
       PhotoCordova,
-      QrscanAnyline,
       PmscanAnyline,
-      TriPhoto
+      TriPhoto,
+      TriQrscan
     },
     props: {
     },

@@ -1,13 +1,12 @@
 <template>
-  <component :is="photoComponent" @success="onPhoto" @fail="onFail" :small="small"></component>
+  <component :is="qrscanComponent" @success="onQrscan" @fail="onFail" :small="small"></component>
 </template>
 
 <script>
-  import PhotoWeb from 'src/components/tri_component/photo_web.vue'
-  import PhotoWechat from 'src/components/tri_component/photo_wechat.vue'
+  import QrscanWechat from 'src/components/tri_component/qrscan_wechat.vue'
 
-  var triPhoto = {
-    name: 'triPhoto',
+  var triQrscan = {
+    name: 'triQrscan',
     components: {
     },
     props: {
@@ -20,7 +19,7 @@
       return {}
     },
     methods: {
-      onPhoto (result) {
+      onQrscan (result) {
         /*
         if wechat {
           adad
@@ -36,33 +35,31 @@
       }
     },
     computed: {
-      photoComponent () {
-        var photoCompenentChoice
+      qrscanComponent () {
+        var compenentChoice
         switch (__PLATFORM) {
           case 'wechat':
-            photoCompenentChoice = 'PhotoWechat'
+            compenentChoice = 'QrscanWechat'
             break
           default:
-            photoCompenentChoice = 'PhotoWeb'
+            compenentChoice = ''
         }
-        return photoCompenentChoice
+        return compenentChoice
       }
     }
   }
 
   switch (__PLATFORM) {
     case 'wechat':
-      triPhoto.components = {
-        PhotoWechat
+      triQrscan.components = {
+        QrscanWechat
       }
       break
     default:
-      triPhoto.components = {
-        PhotoWeb // eslint-disable-line no-undef
-      }
+      triQrscan.components = {}
   }
 
-  export default triPhoto
+  export default triQrscan
 </script>
 
 <style>

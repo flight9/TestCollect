@@ -38,7 +38,7 @@
         var that = this
         wx.scanQRCode({
           needResult: 1, //  默认为0，扫描结果由微信处理，1 则直接返回扫描结果
-          scanType: this.scanType,
+          scanType: this.options.scanType,
           success: function (res) {
             var value = res.resultStr
             that.$emit('success', {value})
