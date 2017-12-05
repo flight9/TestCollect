@@ -1,7 +1,10 @@
 <template>
-  <q-btn @click="takephoto" :small="small">
-    <q-icon name="camera_alt" />
-  </q-btn>
+  <div>
+    <q-btn @click="takephoto" :small="small" style="vertical-align: top;" ref="btn">
+      <q-icon name="camera_alt" />
+    </q-btn>
+    <img v-show="localId" :height="imgHeight" :width="imgHeight" :src="localId"/>
+  </div>
 </template>
 
 <script>
@@ -15,6 +18,9 @@
     components: {
       QBtn,
       QIcon
+    },
+    mounted () {
+      this.matchHeight()
     },
     props: {
       small: { // button small size
@@ -31,9 +37,15 @@
       }
     },
     data () {
-      return {}
+      return {
+        localId: '',
+        imgHeight: '40px'
+      }
     },
     methods: {
+      matchHeight () {
+        this.imgHeight = this.$refs.btn.$el.clientHeight + 'px'
+      },
       takephoto () {
         var that = this
         wx.chooseImage({
@@ -54,6 +66,7 @@
             localId: localId,
             isShowProgressTips: 1, // 显示进度提示
             success: function (res) {
+              that.localId = localId
               var serverId = res.serverId
               that.$emit('success', {serverId, localId})
             },
