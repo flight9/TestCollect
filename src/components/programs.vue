@@ -17,6 +17,16 @@
       </q-btn>
     </q-toolbar>
 
+    <q-btn @click.prevent="$router.push('/task/list')">
+      <a href="/#/task/list">second link</a>
+    </q-btn>
+    <tri-link-btn path="/task/list" small rounded color="amber" text-small>third link(tri)</tri-link-btn>
+    <q-btn path="/task/list" small rounded color="amber" text-small>third link</q-btn>
+
+    <tri-link-btn small path="/task/list">fourth link(tri)</tri-link-btn>
+    <q-btn small path="/task/list">fourth link</q-btn>
+
+
     <q-card inline @click="$router.push('/task/list')">
       <q-card-media>
         <img src="./img/program-1.jpg">
@@ -79,6 +89,8 @@
     QItemMain
   } from 'quasar'
   import anyline from 'src/api/tri_anyline'
+  import TriBtn from 'src/components/tri_component/tri_btn.vue'
+  import TriLinkBtn from 'src/components/tri_component/tri_link_btn.vue'
   import { mapActions } from 'vuex'
   export default {
     components: {
@@ -97,7 +109,9 @@
       QSideLink,
       QItem,
       QItemSide,
-      QItemMain
+      QItemMain,
+      TriBtn,
+      TriLinkBtn
     },
     data () {
       return {
