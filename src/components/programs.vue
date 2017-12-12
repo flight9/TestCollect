@@ -89,7 +89,6 @@
     QItemMain
   } from 'quasar'
   import anyline from 'src/api/tri_anyline'
-  import TriBtn from 'src/components/tri_component/tri_btn.vue'
   import TriLinkBtn from 'src/components/tri_component/tri_link_btn.vue'
   import { mapActions } from 'vuex'
   export default {
@@ -110,7 +109,6 @@
       QItem,
       QItemSide,
       QItemMain,
-      TriBtn,
       TriLinkBtn
     },
     data () {
