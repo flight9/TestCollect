@@ -5,14 +5,11 @@
 import wx from 'weixin-js-sdk'
 import axios from 'axios'
 const wechat = {
-  test () {
-    console.log('wechat.test')
-  },
   jsconfig () {
     var data = {
       url: window.location.href.split('#')[0]
     }
-    axios.post('/api/jsconfig', // api on our server when prod or a proxy server when dev
+    axios.post('/tri-wechat-api/jsconfig', // api on our server when prod or a proxy server when dev
       data).then((response) => {
       var cfg = response.data
       wx.config({
@@ -27,7 +24,7 @@ const wechat = {
         alert(res.errMsg)
       })
       wx.ready(function () {
-        // This will always be called even when there is error
+        // This will always be called even when there is an error
         // alert('jssdk ready')
       })
     })
