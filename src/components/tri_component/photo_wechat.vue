@@ -66,7 +66,19 @@
             localId: localId,
             isShowProgressTips: 1, // 显示进度提示
             success: function (res) {
-              that.localId = localId
+              // Determin if the client are using ios wkwebview
+              alert('wxjs_is_wkwebview is: ' + window.wxjs_is_wkwebview + ',' + window.__wxjs_is_wkwebview)
+              if (window.wxjs_is_wkwebview === true) {
+                wx.getLocalImgData({
+                  localId: localId, // 图片的localID
+                  success: function (res) {
+                    that.localId = res.localData // localData是图片的base64数据，可以用img标签显示
+                  }
+                })
+              }
+              else {
+                that.localId = localId
+              }
               var serverId = res.serverId
               that.$emit('success', {serverId, localId})
             },
