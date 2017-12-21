@@ -66,9 +66,9 @@
             localId: localId,
             isShowProgressTips: 1, // 显示进度提示
             success: function (res) {
-              // Determin if the client are using ios wkwebview
-              alert('wxjs_is_wkwebview is: ' + window.wxjs_is_wkwebview + ',' + window.__wxjs_is_wkwebview)
-              if (window.wxjs_is_wkwebview === true) {
+              // Determine if the client are using ios wkwebview
+              if (window.__wxjs_is_wkwebview === true) {
+                // new ios and wechat
                 wx.getLocalImgData({
                   localId: localId, // 图片的localID
                   success: function (res) {
@@ -77,6 +77,7 @@
                 })
               }
               else {
+                // android and old ios
                 that.localId = localId
               }
               var serverId = res.serverId
