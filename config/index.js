@@ -46,8 +46,8 @@ module.exports = {
     // https://github.com/chimurai/http-proxy-middleware
     proxyTable: {
       '/tri-wechat-api/jsconfig': {
-        // target: 'http://localhost/testwechat/jsconfig.php', // 设置你调用的接口域名和端口号 别忘了加http
-        target: 'http://www.drupalvm.dev/tri-wechat-api/jsconfig',
+        target: 'http://localhost/testwechat/jsconfig.php', // 设置你调用的接口域名和端口号 别忘了加http
+        // target: 'http://www.drupalvm.dev/tri-wechat-api/jsconfig',
         changeOrigin: true
       }
     }
