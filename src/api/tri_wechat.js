@@ -18,7 +18,7 @@ const wechat = {
         timestamp: cfg.timestamp,
         nonceStr: cfg.nonceStr,
         signature: cfg.signature,
-        jsApiList: ['chooseImage', 'uploadImage', 'scanQRCode'] // 看具体要调用的接口
+        jsApiList: ['chooseImage', 'uploadImage', 'scanQRCode', 'getLocalImgData'] // 看具体要调用的接口
       })
       wx.error(function (res) {
         alert(res.errMsg)
@@ -31,6 +31,16 @@ const wechat = {
   },
   inWechat () {
     return /micromessenger/.test(navigator.userAgent.toLowerCase())
+  },
+  phoneType () {
+    let type = 'unknown'
+    if (/(iPhone|iPad|iPod|iOS)/i.test(navigator.userAgent)) {
+      type = 'iphone'
+    }
+    else if (/(Android)/i.test(navigator.userAgent)) {
+      type = 'android'
+    }
+    return type
   }
 }
 
