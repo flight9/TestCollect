@@ -35,12 +35,27 @@ const wechat = {
   phoneType () {
     let type = 'unknown'
     if (/(iPhone|iPad|iPod|iOS)/i.test(navigator.userAgent)) {
-      type = 'iphone'
+      type = 'ios'
     }
     else if (/(Android)/i.test(navigator.userAgent)) {
       type = 'android'
     }
     return type
+  },
+  setDocumentTitle (title) {
+    document.title = title
+    if (this.phoneType() === 'ios') {
+      // Tricky code for IOS
+      var i = document.createElement('iframe')
+      i.src = '/favicon.ico'
+      i.style.display = 'none'
+      i.onload = function () {
+        setTimeout(function () {
+          i.remove()
+        }, 9)
+      }
+      document.body.appendChild(i)
+    }
   }
 }
 

@@ -87,6 +87,7 @@
   } from 'quasar'
   import { mapState } from 'vuex'
   import connection from 'src/api/tri_connection'
+  import wechat from 'src/api/tri_wechat'
   export default {
     components: {
       QLayout,
@@ -115,7 +116,8 @@
         alert(connection.isConnecting() ? 'true' : 'false')
       },
       scancode: function () {
-        alert(true)
+        wechat.setDocumentTitle('mmmmm~~')
+        alert('Doc title changed!')
       }
     }
   }
