@@ -86,7 +86,8 @@
     QInput,
     scroll,
     QSelect,
-    QAlert
+    QAlert,
+    Toast
   } from 'quasar'
   import global_ from 'src/components/global'
   import transfer from 'src/api/tri_transfer'
@@ -177,8 +178,45 @@
       this.questionMatch = this.checkResult()
     },
     mounted: function () {
+      // TEST for catching envent when a user clicks the RETURN button on wechat
+      this.pushHistory() // this line first or addEventListener may not work
+      setTimeout(() => {
+        window.addEventListener('popstate', this.handlePopstate, false)
+        console.log('addEventListener')
+      }, 500)
+    },
+    beforeDestroy: function () {
+      window.removeEventListener('popstate', this.handlePopstate, false)
+      console.log('removeEventListener')
     },
     methods: {
+      // add a dummy history state
+      pushHistory () {
+        console.log('pushHistory')
+        var state = {
+          title: 'title',
+          url: '#'
+        }
+        window.history.pushState(state, state.title, state.url)
+      },
+      // catch popstate event
+      handlePopstate (e) {
+        console.info(e)
+        this.toastClickReturnAgain()
+      },
+      // toast how to goback
+      toastClickReturnAgain () {
+        Toast.create({
+          html: 'Click "RETURN" again to go back.',
+          timeout: 2000,
+          onDismiss: () => {
+            // pushHistrory again for next time catching
+            if (!this._isDestroyed) {
+              this.pushHistory()
+            }
+          }
+        })
+      },
       checkResult () {
         this.hasError = this._hasError()
         if (this.hasError) {
